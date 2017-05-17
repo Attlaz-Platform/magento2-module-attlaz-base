@@ -47,8 +47,6 @@ class RealTimeInfoHelper extends Data
                     $productExternalId = $this->getExternalId($magentoProduct);
                     $attlazProductData = $this->productRepository->fetchProduct($productExternalId, $customerExternalId);
 
-                    var_dump($attlazProductData);
-                    die();
                     if ($attlazProductData) {
                         $this->appendExternalDataToProduct($magentoProduct, $attlazProductData);
 
