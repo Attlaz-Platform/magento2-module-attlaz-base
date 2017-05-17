@@ -15,9 +15,7 @@
       "registration.php"
     ],
     "psr-4": {
-      "Attlaz\\Base\\": ""
-    },
-    "psr-0": {
+      "Attlaz\\Base\\": "",
       "Attlaz\\": "Client/src/"
     }
   }
