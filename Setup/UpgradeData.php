@@ -172,6 +172,28 @@ class UpgradeData implements UpgradeDataInterface
 
         $attribute->save();
 
+        /**
+         * Add field for external id for customer addresses
+         */
+        $customerSetup->addAttribute('customer_address', Data::EXTERNAL_ID_FIELD, [
+            'type'       => 'varchar',
+            'label'      => 'External id',
+            'input'      => 'text',
+            'required'   => false,
+            'visible'    => true,
+            'sort_order' => 1000,
+            'backend'    => '',
+            'system'     => false,
+        ]);
+
+        $attribute = $customerSetup->getEavConfig()
+                                   ->getAttribute('customer_address', Data::EXTERNAL_ID_FIELD);
+        $attribute->addData([
+            'used_in_forms' => ['adminhtml_customer_address'],
+        ]);
+
+        $attribute->save();
+
     }
 
 }
