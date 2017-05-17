@@ -34,7 +34,7 @@ class CheckoutCartChangedObserver implements ObserverInterface
         return $product->getFinalPrice($qty);
     }
 
-    private function setCustomPriceToItem($price, $item)
+    private function setCustomPriceToItem($price, \Magento\Quote\Model\Quote\Item $item)
     {
         $item->setCustomPrice($price);
         $item->setOriginalCustomPrice($price);
@@ -52,12 +52,18 @@ class CheckoutCartChangedObserver implements ObserverInterface
 
     private function updateAllProductsInCart(Observer $observer)
     {
+        /** @var \Magento\Checkout\Model\Cart $cart */
         $cart = $observer->getData('cart');
         if ($cart) {
             $items = $cart->getItems();
             if ($items) {
+                /** @var \Magento\Quote\Model\Quote\Item $item */
                 foreach ($items as $item) {
-                    $product = $this->getLoadProduct($item->getProductId());
+
+
+                    $productId = $this->getProductId($item);
+
+                    $product = $this->getLoadProduct($productId);
                     $this->productHelper->updateProductWithExternalData($product);
 
                     $price = $this->getUpdatedPriceForProduct($product, $item->getQty());
@@ -65,6 +71,26 @@ class CheckoutCartChangedObserver implements ObserverInterface
                 }
             }
         }
+
+    }
+
+    private function getProductId(\Magento\Quote\Model\Quote\Item $item)
+    {
+        if ($item->getProductType() === 'configurable') {
+
+            $buyRequest = $item->getOptionByCode('info_buyRequest');
+
+            $data = unserialize($buyRequest->getValue());
+
+            if (isset($data['selected_configurable_option'])) {
+                return $data['selected_configurable_option'];
+            }
+
+        } elseif ($item->getProductType() === 'simple') {
+            return $item->getProduct()
+                        ->getId();
+        }
+        throw  new \Exception('Unable to determine item id');
     }
 
     public function execute(Observer $observer)

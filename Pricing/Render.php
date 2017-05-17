@@ -51,7 +51,7 @@ class Render extends \Magento\Framework\Pricing\Render
         if ($this->customerHelper->shouldDisplayPrices()) {
 
 
-            if ($this->shouldRenderRealTimePrice()) {
+            if ($this->shouldRenderRealTimePrice($saleableItem)) {
                 if ($this->isRealTimePriceLoaded()) {
                     $html = parent::render($priceCode, $saleableItem, $arguments);
                 } else {
@@ -78,8 +78,12 @@ class Render extends \Magento\Framework\Pricing\Render
         return $html;
     }
 
-    private function shouldRenderRealTimePrice(): bool
+    private function shouldRenderRealTimePrice(SaleableInterface $saleableItem): bool
     {
+        if ($saleableItem->getTypeId() === 'configurable') {
+            return false;
+        }
+
         return true;
         $value = intval($this->_scopeConfig->getValue('attlaz/catalog/show_realtime_stock'));
 
