@@ -52,7 +52,7 @@ class ProductRepository
             }
         } catch (\Exception $ex) {
 
-
+            $this->logger->error($ex->getMessage(), ['ex' => $ex]);
         }
 
         return $totalProducts;
@@ -66,40 +66,33 @@ class ProductRepository
 
         $productInfo = $this->getProductInfo($productIds, $customerId);
 
-        // var_dump($prices);
-        foreach ($productIds as $productId) {
+        foreach ($productInfo as $productData) {
 
 
-            if (isset($productInfo[$productId])) {
+            $productId = $productData['id'];
+            $productInfoPrices = $productData['prices'];
+            $productInfoStock = $productData['stock'];
 
-                $productData = $productInfo[$productId];
-                $p = new Product();
-                $p->id = $productId;
+            $p = new Product();
+            $p->id = $productId;
 
-                $productInfoPrices = $productData['price'];
-                $productInfoStock = $productData['stock'];
-
+            foreach ($productInfoPrices as $qty => $productInfoPrice) {
                 $price = new ProductPrice();
 
-                $price->endExcl = $this->parsePrice((string)$productInfoPrices['endExcl']);
-                $price->endIncl = $this->parsePrice((string)$productInfoPrices['endIncl']);
-                $price->baseExcl = $this->parsePrice((string)$productInfoPrices['endExcl']);
-                $price->baseIncl = $this->parsePrice((string)$productInfoPrices['endIncl']);
+                $price->endExcl = $this->parsePrice((string)$productInfoPrice['finalExcl']);
+                $price->endIncl = $this->parsePrice((string)$productInfoPrice['finalIncl']);
+                $price->baseExcl = $this->parsePrice((string)$productInfoPrice['baseExcl']);
+                $price->baseIncl = $this->parsePrice((string)$productInfoPrice['baseIncl']);
 
-//                var_dump($price->endExcl);
-//                var_dump($price->endIncl);
-//
-//                die();
+                $p->addPrice($qty, $price);
+            }
 
-                $p->addPrice(1, $price);
-
-                //Stock
+            //Stock
 //                $stock = new ProductStock(new ProductStockLocation(0, 'base'));
 //                $stock->setStock($productInfoStock['qty']);
 //                $p->addStock($stock);
 
-                $result->addProduct($p);
-            }
+            $result->addProduct($p);
 
         }
 
