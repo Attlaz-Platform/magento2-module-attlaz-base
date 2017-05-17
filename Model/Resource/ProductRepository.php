@@ -101,6 +101,7 @@ class ProductRepository
 
                     $stock = new ProductStock(new ProductStockLocation(0, $locationCode));
                     $stock->setStock($stockLocation['stock']);
+                    $stock->setData($stockLocation['data']);
                     $p->addStock($stock);
                 }
 

@@ -10,15 +10,18 @@ use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Customer\Model\Group;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
+use \Magento\Tax\Model\Config as TaxConfig;
 
 class PriceHelper extends AbstractHelper
 {
     private $objectManager;
+    private $taxConfig;
 
-    public function __construct(Context $context, ObjectManagerInterface $objectManager)
+    public function __construct(Context $context, ObjectManagerInterface $objectManager, TaxConfig $taxConfig)
     {
         parent::__construct($context);
         $this->objectManager = $objectManager;
+        $this->taxConfig = $taxConfig;
     }
 
     public function updateProductPriceWithAttlazData(MagentoProduct $magentoProduct, AttlazProduct $attlazProduct)
@@ -73,12 +76,12 @@ class PriceHelper extends AbstractHelper
 
     private function pricesIncludesTax(): bool
     {
-        //TODO: load value from configuration
-//        $priceIncludesTax = Mage::getStoreConfig('tax/calculation/price_includes_tax', Mage::app()
-//                                                                                           ->getStore());
-//        if ((int)$priceIncludesTax === 1) {
-//            return true;
-//        }
+
+
+        $priceDisplayType = $this->taxConfig->getPriceDisplayType();
+        if ($priceDisplayType === TaxConfig::DISPLAY_TYPE_INCLUDING_TAX || $priceDisplayType === TaxConfig::DISPLAY_TYPE_BOTH) {
+            return true;
+        }
 
         return false;
     }

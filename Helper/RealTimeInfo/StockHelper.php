@@ -31,6 +31,7 @@ class StockHelper extends AbstractHelper
                 'qty'                         => $qtyAvailable,
                 'manage_stock'                => 1,
                 'use_config_notify_stock_qty' => 0,
+                'data'                        => $stock->getData(),
             ];
         }
 

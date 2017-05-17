@@ -21,8 +21,8 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     private $realtimeRenderHelper;
     private $realTimeInfoHelper;
 
-    public function __construct(Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry, array $data, CustomerHelper $customerHelper, RealTimeInfoHelper $realTimeInfoHelper,
-                                RealTimeRenderHelper $realtimeRenderHelper)
+    public function __construct(Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry, CustomerHelper $customerHelper, RealTimeInfoHelper $realTimeInfoHelper,
+                                RealTimeRenderHelper $realtimeRenderHelper, array $data = [])
     {
         parent::__construct($context, $registry, $stockState, $stockRegistry, $data);
         $this->_isScopePrivate = true;

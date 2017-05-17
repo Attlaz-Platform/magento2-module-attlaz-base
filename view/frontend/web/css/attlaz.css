@@ -1,3 +1,9 @@
+.ready .request-content {
+  background-color: #d6ffd2; }
+
+.error .request-content {
+  background-color: #ffd2d2; }
+
 .loading .request-content:before {
   content: '\e810';
   font-family: "icons";
@@ -36,9 +42,9 @@
 
 @-moz-keyframes spin {
   0% {
-    -moz-transform: rotate(0deg);
-    -o-transform: rotate(0deg);
     -webkit-transform: rotate(0deg);
+    -moz-transform: rotate(0deg);
+    -ms-transform: rotate(0deg);
     transform: rotate(0deg); }
   100% {
     -webkit-transform: rotate(359deg);
@@ -89,5 +95,3 @@
     -moz-transform: rotate(359deg);
     -ms-transform: rotate(359deg);
     transform: rotate(359deg); } }
-
-/*# sourceMappingURL=attlaz.css.map */
