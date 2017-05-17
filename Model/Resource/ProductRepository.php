@@ -11,9 +11,16 @@ use Attlaz\Model\Catalog\ProductStockLocation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Stream;
+use Psr\Log\LoggerInterface;
 
 class ProductRepository
 {
+    private $logger;
+
+    public function __construct(LoggerInterface $logger)
+    {
+        $this->logger = $logger;
+    }
 
     public function fetchProduct(string $productId, string $customerId): Product
     {
@@ -135,8 +142,13 @@ class ProductRepository
 
         $data = \json_decode($response, true);
 
-        return $data['response'];
+        $response = $data['response'];
+        if (!\is_array($response)) {
+            $this->logger->error('Invalid response: ' . \json_encode($response));
+            $response = [];
+        }
 
+        return $response;
     }
 
     private function parsePrice(string $input): float
