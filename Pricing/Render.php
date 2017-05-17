@@ -17,7 +17,7 @@ class Render extends \Magento\Framework\Pricing\Render
     /** @var RealTimeRenderHelper */
     private $realTimeRenderHelper;
 
-    public function __construct(Template\Context $context, Layout $priceLayout, array $data, CustomerHelper $customerHelper, RealTimeRenderHelper $realTimeRenderHelper)
+    public function __construct(Template\Context $context, Layout $priceLayout, CustomerHelper $customerHelper, RealTimeRenderHelper $realTimeRenderHelper, array $data = [])
     {
         parent::__construct($context, $priceLayout, $data);
         $this->_isScopePrivate = true;

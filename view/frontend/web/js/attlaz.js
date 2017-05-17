@@ -1,25 +1,23 @@
 /// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
 'use strict';
-setTimeout(function () {
-    require(["jquery"], function ($) {
-        $(document).ready(function () {
-            AttlazBase.updateRequests();
-        });
+require(["jquery"], function ($) {
+    $(document).ready(function () {
+        AttlazBase.updateRequests();
     });
-}, 1);
-var AttlazBase = (function () {
+});
+var AttlazBase = /** @class */ (function () {
     function AttlazBase() {
     }
     AttlazBase.log = function (msg) {
         console.log('Attlaz: ', msg);
     };
     AttlazBase.updateRequests = function () {
-        this.log('Update Requests');
         var requests = [];
         jQuery('[data-update-realtime]').each(function (i, elem) {
             var requestBlock = jQuery(elem);
             requests.push(requestBlock);
         });
+        this.log('Update Requests (' + requests.length + ')');
         this.update(requests);
     };
     AttlazBase.getNextRequestId = function () {
