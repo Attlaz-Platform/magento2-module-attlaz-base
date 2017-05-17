@@ -72,12 +72,14 @@ class ProductInfo extends Action
             $result = [
                 'success' => true,
                 'data'    => $resultData,
+                't'       => \gmdate('U'),
             ];
         } catch (\Exception $ex) {
             $this->logger->error($ex->getMessage());
             $result = [
                 'success' => false,
                 'data'    => $ex->getMessage(),
+                't'       => \gmdate('U'),
             ];
         }
         $this->getResponse()
