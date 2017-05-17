@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Helper\RealTime;
 
-use Attlaz\Base\Model\Resource\RealTimeInfoRequest;
+use Attlaz\Base\Model\RealTimeInfoRequest;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\App\Helper\AbstractHelper;

@@ -4,7 +4,7 @@ namespace Attlaz\Base\Controller\Api;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\ProductHelper;
-use Attlaz\Base\Model\Resource\RealTimeInfoRequest;
+use Attlaz\Base\Model\RealTimeInfoRequest;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\Registry;

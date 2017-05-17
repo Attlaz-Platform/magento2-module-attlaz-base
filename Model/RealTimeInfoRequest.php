@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Attlaz\Base\Model\Resource;
+namespace Attlaz\Base\Model;
 
 class RealTimeInfoRequest implements \JsonSerializable
 {
