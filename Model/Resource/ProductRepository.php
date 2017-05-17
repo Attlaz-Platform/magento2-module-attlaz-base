@@ -27,7 +27,12 @@ class ProductRepository
 
         $products = $this->fetchProducts([$productId], $customerId);
 
-        return $products->getById($productId);
+        $product = $products->getById($productId);
+        if (\is_null($product)) {
+            throw new \Exception('No product data for product "' . $productId . '"');
+        }
+
+        return $product;
 
     }
 
@@ -68,31 +73,39 @@ class ProductRepository
 
         foreach ($productInfo as $productData) {
 
+            if (!isset($productData['id'])) {
+                $this->logger->warning('Inalid response', $productData);
+            } else {
 
-            $productId = $productData['id'];
-            $productInfoPrices = $productData['prices'];
-            $productInfoStock = $productData['stock'];
 
-            $p = new Product();
-            $p->id = $productId;
+                $productId = $productData['id'];
+                $productInfoPrices = $productData['prices'];
+                $productInfoStock = $productData['stock'];
 
-            foreach ($productInfoPrices as $qty => $productInfoPrice) {
-                $price = new ProductPrice();
+                $p = new Product();
+                $p->id = $productId;
 
-                $price->endExcl = $this->parsePrice((string)$productInfoPrice['finalExcl']);
-                $price->endIncl = $this->parsePrice((string)$productInfoPrice['finalIncl']);
-                $price->baseExcl = $this->parsePrice((string)$productInfoPrice['baseExcl']);
-                $price->baseIncl = $this->parsePrice((string)$productInfoPrice['baseIncl']);
+                foreach ($productInfoPrices as $qty => $productInfoPrice) {
+                    $price = new ProductPrice();
 
-                $p->addPrice($qty, $price);
+                    $price->endExcl = $this->parsePrice((string)$productInfoPrice['finalExcl']);
+                    $price->endIncl = $this->parsePrice((string)$productInfoPrice['finalIncl']);
+                    $price->baseExcl = $this->parsePrice((string)$productInfoPrice['baseExcl']);
+                    $price->baseIncl = $this->parsePrice((string)$productInfoPrice['baseIncl']);
+
+                    $p->addPrice($qty, $price);
+                }
+
+                foreach ($productInfoStock as $locationCode => $stockLocation) {
+
+
+                    $stock = new ProductStock(new ProductStockLocation(0, $locationCode));
+                    $stock->setStock($stockLocation['stock']);
+                    $p->addStock($stock);
+                }
+
+                $result->addProduct($p);
             }
-
-            //Stock
-//                $stock = new ProductStock(new ProductStockLocation(0, 'base'));
-//                $stock->setStock($productInfoStock['qty']);
-//                $p->addStock($stock);
-
-            $result->addProduct($p);
 
         }
 
