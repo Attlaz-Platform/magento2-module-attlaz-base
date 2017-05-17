@@ -30,7 +30,7 @@ class RealTimeRenderHelper extends AbstractHelper
         }
         $blockClass = get_class($block);
 
-        $request = new RealTimeInfoRequest($productId, $blockClass, $template, $data, $type);
+        $request = new RealTimeInfoRequest($productId, $blockClass, $type, $data, $template);
 
         $jsonRequest = json_encode($request);
         $request = base64_encode($jsonRequest);

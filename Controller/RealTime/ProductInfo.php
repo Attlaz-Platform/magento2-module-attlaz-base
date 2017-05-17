@@ -62,7 +62,7 @@ class ProductInfo extends Action
                 } catch (\Exception $ex) {
                     $resultData[$request->requestId] = [
                         'success' => false,
-                        'result'  => null,
+                        'result'  => $ex->getMessage(),
                     ];
                     $this->logger->error('Unable to render real time block: ' . $ex->getMessage(), ['request' => $request->jsonSerialize()]);
                 }
@@ -135,52 +135,9 @@ class ProductInfo extends Action
         return $collection;
     }
 
-    /**
-     * @param $request
-     * @param $product
-     * @return string
-     */
-    private function renderStockInfoBlock(RealTimeInfoRequest $request, $product): string
-    {
-        $block = $request->block;
-        $template = $request->template;
-        $data = $request->data;
-        $data['product'] = $product;
-
-        /** @var AbstractBlock $block */
-        $block = $this->_objectManager->create($block, ['data' => $data]);
-        $block->setData(Data::BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA, true);
-
-        if ($block instanceof Template) {
-            $block->setTemplate($template);
-        }
-
-        $output = $block->toHtml();
-
-        return $output;
-    }
-
-    private function renderPriceBlock(RealTimeInfoRequest $request, $product, $priceRender): string
-    {
-        $priceCode = $request->data['priceCode'];
-        $arguments = $request->data['arguments'];
-
-        //TODO: temp: don't use registry
-        if ($arguments['zone'] === \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW) {
-            $this->coreRegistry->register('current_product', $product);
-        }
-        $output = $priceRender->render($priceCode, $product, $arguments);
-
-        //TODO: temp: don't use registry
-        if ($arguments['zone'] === \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW) {
-            $this->coreRegistry->unregister('current_product');
-        }
-
-        return $output;
-    }
-
     private function renderRealTimeBlock(RealTimeInfoRequest $request, Collection $products, $priceRender)
     {
+
         $productId = $request->product;
         $product = $products->getItemById($productId);
 
@@ -203,8 +160,57 @@ class ProductInfo extends Action
         return $output;
     }
 
+    private function renderStockInfoBlock(RealTimeInfoRequest $request, $product): string
+    {
+        $start_time = microtime(true);
+        $block = $request->block;
+        $template = $request->template;
+        $data = $request->data;
+        $data['product'] = $product;
+
+        /** @var AbstractBlock $block */
+        $block = $this->_objectManager->create($block, ['data' => $data]);
+        $block->setData(Data::BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA, true);
+
+        if ($block instanceof Template) {
+            $block->setTemplate($template);
+        }
+
+        $output = $block->toHtml();
+
+        $end_time = microtime(true);
+
+        $this->bench['Render stock block'] = $end_time - $start_time;
+
+        return $output;
+    }
+
+    private function renderPriceBlock(RealTimeInfoRequest $request, $product, $priceRender): string
+    {
+        $start_time = microtime(true);
+        $priceCode = $request->data['priceCode'];
+        $arguments = $request->data['arguments'];
+
+        //TODO: temp: don't use registry
+        if ($arguments['zone'] === \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW) {
+            $this->coreRegistry->register('current_product', $product);
+        }
+        $output = $priceRender->render($priceCode, $product, $arguments);
+
+        //TODO: temp: don't use registry
+        if ($arguments['zone'] === \Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW) {
+            $this->coreRegistry->unregister('current_product');
+        }
+        $end_time = microtime(true);
+
+        $this->bench['Render price block'] = $end_time - $start_time;
+
+        return $output;
+    }
+
     private function getPriceRenderer(): Render
     {
+
         $resultPage = $this->resultPageFactory->create();
 
         //TODO: do we need to validate the block?
