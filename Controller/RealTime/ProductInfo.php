@@ -1,6 +1,6 @@
 <?php
 
-namespace Attlaz\Base\Controller\Api;
+namespace Attlaz\Base\Controller\RealTime;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\ProductHelper;
