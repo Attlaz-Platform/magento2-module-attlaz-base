@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Observer;
 
-use Attlaz\Base\Helper\ProductHelper;
+use Attlaz\Base\Helper\RealTimeInfo\RealTimeInfoHelper;
 use Magento\Framework\Event\ObserverInterface;
 use \Magento\Framework\Event\Observer;
 use \Magento\Catalog\Model\ProductFactory;
@@ -11,14 +11,14 @@ use  \Psr\Log\LoggerInterface;
 
 class CheckoutCartChangedObserver implements ObserverInterface
 {
-    private $productHelper;
+    private $realTimeInfoHelper;
     private $logger;
     /** @var \Magento\Catalog\Model\Product */
     private $productFactory;
 
-    public function __construct(ProductHelper $productHelper, LoggerInterface $logger, ProductFactory $productFactory)
+    public function __construct(RealTimeInfoHelper $realTimeInfoHelper, LoggerInterface $logger, ProductFactory $productFactory)
     {
-        $this->productHelper = $productHelper;
+        $this->realTimeInfoHelper = $realTimeInfoHelper;
         $this->logger = $logger;
         $this->productFactory = $productFactory;
     }
@@ -43,7 +43,7 @@ class CheckoutCartChangedObserver implements ObserverInterface
     private function updateSingleProductFromQuote(Observer $observer)
     {
         $product = $observer->getData('product');
-        $this->productHelper->updateProductWithExternalData($product);
+        $this->realTimeInfoHelper->updateProductWithExternalData($product);
 
         $quoteItem = $observer->getData('quote_item');
         $price = $this->getUpdatedPriceForProduct($product, $quoteItem->getQty());
@@ -64,7 +64,7 @@ class CheckoutCartChangedObserver implements ObserverInterface
                     $productId = $this->getProductId($item);
 
                     $product = $this->getLoadProduct($productId);
-                    $this->productHelper->updateProductWithExternalData($product);
+                    $this->realTimeInfoHelper->updateProductWithExternalData($product);
 
                     $price = $this->getUpdatedPriceForProduct($product, $item->getQty());
                     $this->setCustomPriceToItem($price, $item);

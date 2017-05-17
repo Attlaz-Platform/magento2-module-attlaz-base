@@ -48,9 +48,11 @@ class UpgradeData implements UpgradeDataInterface
      */
     private $eavSetupFactory;
 
+    private $customerSetupFactory;
+
     private $logger;
 
-    public function __construct(IndexerRegistry $indexerRegistry, Config $eavConfig, AttributeSetFactory $attributeSetFactory, EavSetupFactory $eavSetupFactory, LoggerInterface $logger)
+    public function __construct(IndexerRegistry $indexerRegistry, Config $eavConfig, AttributeSetFactory $attributeSetFactory, EavSetupFactory $eavSetupFactory, CustomerSetupFactory $customerSetupFactory, LoggerInterface $logger)
     {
 
 
@@ -58,6 +60,7 @@ class UpgradeData implements UpgradeDataInterface
         $this->indexerRegistry = $indexerRegistry;
         $this->eavConfig = $eavConfig;
         $this->eavSetupFactory = $eavSetupFactory;
+        $this->customerSetupFactory = $customerSetupFactory;
 
         $this->logger = $logger;
     }
@@ -79,7 +82,10 @@ class UpgradeData implements UpgradeDataInterface
             $this->logger->info('Upgrade Attlaz Module to 1.0.1');
             $this->upgradeVersionOneZeroOne($setup);
         }
-
+        if ($this->currentVersionIsLowerThan($context, '1.0.2')) {
+            $this->logger->info('Upgrade Attlaz Module to 1.0.2');
+            $this->upgradeVersionOneZeroTwo($setup);
+        }
         $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
         $indexer->reindexAll();
         $this->eavConfig->clear();
@@ -88,6 +94,9 @@ class UpgradeData implements UpgradeDataInterface
 
     private function upgradeVersionOneZeroOne(ModuleDataSetupInterface $setup)
     {
+        /**
+         * Add field for external id for categories and products
+         */
 
         /** @var EavSetup $eavSetup */
         $eavSetup = $this->eavSetupFactory->create(['setup' => $setup]);
@@ -115,6 +124,53 @@ class UpgradeData implements UpgradeDataInterface
             'is_visible_in_grid'      => false,
             'is_filterable_in_grid'   => true,
         ]);
+
+    }
+
+    private function upgradeVersionOneZeroTwo(ModuleDataSetupInterface $setup)
+    {
+
+        $customerSetup = $this->customerSetupFactory->create(['setup' => $setup]);
+        /**
+         * Add field for external id for customers
+         */
+        $customerEntity = $customerSetup->getEavConfig()
+                                        ->getEntityType('customer');
+        $attributeSetId = $customerEntity->getDefaultAttributeSetId();
+
+        /** @var $attributeSet AttributeSet */
+        $attributeSet = $this->attributeSetFactory->create();
+        $attributeGroupId = $attributeSet->getDefaultGroupId($attributeSetId);
+        $customerSetup->addAttribute(Customer::ENTITY, Data::EXTERNAL_ID_FIELD, [
+                'type'       => 'varchar',
+                'label'      => 'External id',
+                'input'      => 'text',
+                'required'   => false,
+                'visible'    => true,
+                'sort_order' => 1000,
+
+                'backend'               => '',
+                'forms'                 => [
+                    'adminhtml_customer',
+                    'adminhtml_checkout',
+                ],
+                'system'                => false,
+                'is_used_in_grid'       => 1,
+                'is_visible_in_grid'    => 1,
+                'is_filterable_in_grid' => 1,
+                'is_searchable_in_grid' => 1,
+            ]
+
+        );
+        $attribute = $customerSetup->getEavConfig()
+                                   ->getAttribute(Customer::ENTITY, Data::EXTERNAL_ID_FIELD)
+                                   ->addData([
+                                       'attribute_set_id'   => $attributeSetId,
+                                       'attribute_group_id' => $attributeGroupId,
+                                       'used_in_forms'      => ['adminhtml_customer'],
+                                   ]);
+
+        $attribute->save();
 
     }
 

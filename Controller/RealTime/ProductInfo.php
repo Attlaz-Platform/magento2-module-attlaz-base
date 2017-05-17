@@ -3,7 +3,7 @@
 namespace Attlaz\Base\Controller\RealTime;
 
 use Attlaz\Base\Helper\Data;
-use Attlaz\Base\Helper\ProductHelper;
+use Attlaz\Base\Helper\RealTimeInfo\RealTimeInfoHelper;
 use Attlaz\Base\Model\RealTimeInfoRequest;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
@@ -19,16 +19,16 @@ class ProductInfo extends Action
 {
     /** @var PageFactory */
     protected $resultPageFactory;
-    protected $productRealTimeInfoHelper;
+    protected $realTimeInfoHelper;
     private $coreRegistry;
     private $logger;
 
-    public function __construct(Context $context, PageFactory $resultPageFactory, ProductHelper $productRealTimeInfoHelper, Registry $registry, LoggerInterface $logger)
+    public function __construct(Context $context, PageFactory $resultPageFactory, RealTimeInfoHelper $realTimeInfoHelper, Registry $registry, LoggerInterface $logger)
     {
         parent::__construct($context);
 
         $this->resultPageFactory = $resultPageFactory;
-        $this->productRealTimeInfoHelper = $productRealTimeInfoHelper;
+        $this->realTimeInfoHelper = $realTimeInfoHelper;
         $this->coreRegistry = $registry;
         $this->logger = $logger;
 
@@ -41,7 +41,7 @@ class ProductInfo extends Action
 
             $requests = $this->getRequestsFromRawRequests();
             $products = $this->getMagentoProductsByRealTimeInfoRequests($requests);
-            $this->productRealTimeInfoHelper->updateProductCollectionWithExternalData($products);
+            $this->realTimeInfoHelper->updateProductCollectionWithExternalData($products);
 
             $priceRender = $this->getPriceRenderer();
 

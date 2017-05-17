@@ -4,12 +4,13 @@ namespace Attlaz\Base\Block\CatalogInventory\Stockqty;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\RealTime\RealTimeRenderHelper;
+use Attlaz\Base\Helper\RealTimeInfo\RealTimeInfoHelper;
+use Attlaz\Base\Helper\RealTimeInfo\StockHelper;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 use Attlaz\Base\Helper\CustomerHelper;
-use Attlaz\Base\Helper\ProductHelper;
 
 /**
  * Product stock qty default block
@@ -18,15 +19,15 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
 {
     private $customerHelper;
     private $realtimeRenderHelper;
-    private $productHelper;
+    private $realTimeInfoHelper;
 
-    public function __construct(Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry, array $data, CustomerHelper $customerHelper, ProductHelper $productHelper,
+    public function __construct(Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry, array $data, CustomerHelper $customerHelper, RealTimeInfoHelper $realTimeInfoHelper,
                                 RealTimeRenderHelper $realtimeRenderHelper)
     {
         parent::__construct($context, $registry, $stockState, $stockRegistry, $data);
         $this->_isScopePrivate = true;
         $this->customerHelper = $customerHelper;
-        $this->productHelper = $productHelper;
+        $this->realTimeInfoHelper = $realTimeInfoHelper;
         $this->realtimeRenderHelper = $realtimeRenderHelper;
     }
 
@@ -68,8 +69,8 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     public function getProductStockQty($product, string $location = 'base')
     {
 
-        if ($product->hasData(ProductHelper::FIELD_TEMP_STOCK_INFO)) {
-            $stockInfo = $product->getData(ProductHelper::FIELD_TEMP_STOCK_INFO);
+        if ($product->hasData(StockHelper::FIELD_TEMP_STOCK_INFO)) {
+            $stockInfo = $product->getData(StockHelper::FIELD_TEMP_STOCK_INFO);
             if (isset($stockInfo[$location])) {
                 $stockLocationInfo = $stockInfo[$location];
 
@@ -86,7 +87,7 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
         $html = '';
         if ($this->customerHelper->shouldDisplayStockInfo()) {
 
-            if (!$this->productHelper->useRealTimeStock() || $this->isRealTimeRender()) {
+            if (!$this->realTimeInfoHelper->useRealTimeStock() || $this->isRealTimeRender()) {
                 $html = parent::_toHtml();
             } else {
                 if ($this->customerHelper->shouldDisplayStockBeforeRealTimeUpdate()) {
