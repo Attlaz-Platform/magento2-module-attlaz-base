@@ -8,9 +8,7 @@
   ],
   "require": {
     "php": "~7.0.0",
-    "guzzlehttp/guzzle": "6.3.*",
-    "psr/log": "1.*",
-    "attlaz/client": "dev-develop"
+    "attlaz/client": "^1.0.0"
   },
   "autoload": {
     "files": [
