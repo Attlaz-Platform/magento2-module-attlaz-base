@@ -2,6 +2,7 @@
 
 namespace Attlaz\Base\Block\CatalogInventory\Stockqty;
 
+use Attlaz\Base\Helper\CustomerHelper;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\RealTime\RealTimeRenderHelper;
 use Attlaz\Base\Helper\RealTimeInfo\RealTimeInfoHelper;
@@ -10,20 +11,24 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
-use Attlaz\Base\Helper\CustomerHelper;
 
-/**
- * Product stock qty default block
- */
 class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultStockqty
 {
     private $customerHelper;
     private $realtimeRenderHelper;
     private $realTimeInfoHelper;
 
-    public function __construct(Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry, CustomerHelper $customerHelper, RealTimeInfoHelper $realTimeInfoHelper,
-                                RealTimeRenderHelper $realtimeRenderHelper, array $data = [])
-    {
+    public function __construct(
+        Context $context,
+        Registry $registry,
+        StockStateInterface $stockState,
+        StockRegistryInterface $stockRegistry,
+
+        CustomerHelper $customerHelper,
+        RealTimeInfoHelper $realTimeInfoHelper,
+        RealTimeRenderHelper $realtimeRenderHelper,
+        array $data = []
+    ) {
         parent::__construct($context, $registry, $stockState, $stockRegistry, $data);
         $this->_isScopePrivate = true;
         $this->customerHelper = $customerHelper;
@@ -33,6 +38,11 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
 
     public function isMsgVisible()
     {
+        if ($this->getProduct()
+                 ->getTypeId() === 'configurable') {
+            return false;
+        }
+
         return true;
     }
 
@@ -44,7 +54,6 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
         }
 
         return $product;
-
     }
 
     public function getTemplate()
@@ -68,7 +77,6 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
 
     public function getProductStockQty($product, string $location = 'base')
     {
-
         if ($product->hasData(StockHelper::FIELD_TEMP_STOCK_INFO)) {
             $stockInfo = $product->getData(StockHelper::FIELD_TEMP_STOCK_INFO);
             if (isset($stockInfo[$location])) {
@@ -79,14 +87,12 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
         }
 
         return parent::getProductStockQty($product);
-
     }
 
     protected function _toHtml()
     {
         $html = '';
         if ($this->customerHelper->shouldDisplayStockInfo()) {
-
             if (!$this->realTimeInfoHelper->useRealTimeStock() || $this->isRealTimeRender()) {
                 $html = parent::_toHtml();
             } else {
@@ -99,11 +105,9 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
 
                 $html = $this->realtimeRenderHelper->renderRealTimeProductStockInfo($productId, $this, [], $html);
             }
-
         }
 
         return $html;
-
     }
 
     private function isRealTimeRender(): bool

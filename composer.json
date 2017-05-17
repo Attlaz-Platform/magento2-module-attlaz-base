@@ -8,17 +8,22 @@
   ],
   "require": {
     "php": "~7.0.0",
-    "magento/magento-composer-installer": "*",
     "guzzlehttp/guzzle": "6.3.*",
-    "psr/log": "1.*"
+    "psr/log": "1.*",
+    "attlaz/client": "dev-develop"
   },
   "autoload": {
     "files": [
       "registration.php"
     ],
     "psr-4": {
-      "Attlaz\\Base\\": "",
-      "Attlaz\\": "Client/src/"
+      "Attlaz\\Base\\": ""
     }
-  }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.echron.be/"
+    }
+  ]
 }
