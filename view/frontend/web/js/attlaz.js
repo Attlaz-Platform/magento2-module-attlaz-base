@@ -91,20 +91,21 @@ var AttlazBase = /** @class */ (function () {
             }
         });
     };
-    AttlazBase.initializeBlock = function (block) {
+    AttlazBase.initializeBlock = function (block, requestId) {
         var _this = this;
         block.off('click').click(function () {
             var requests = [];
             requests.push(block);
             _this.update(requests);
         });
+        block.parent().append('<div class="' + requestId + '_info rq_info"></div>');
         block.data('block_update_initialized', true);
     };
-    AttlazBase.updateBlock = function (blockClass, status, content, extra) {
+    AttlazBase.updateBlock = function (requestId, status, content, extra) {
         var _this = this;
         if (content === void 0) { content = ''; }
         if (extra === void 0) { extra = ''; }
-        jQuery('.' + blockClass).each(function (i, elem) {
+        jQuery('.' + requestId).each(function (i, elem) {
             var block = jQuery(elem);
             var block_initialized = block.data('block_update_initialized');
             if (!block_initialized) {
@@ -112,7 +113,7 @@ var AttlazBase = /** @class */ (function () {
                     content = block.html();
                 }
                 block.html('');
-                _this.initializeBlock(block);
+                _this.initializeBlock(block, requestId);
             }
             if (content === '' || content === null) {
                 content = block.html();
@@ -135,7 +136,28 @@ var AttlazBase = /** @class */ (function () {
             var contentObj = jQuery(content);
             contentObj.addClass('request-content');
             block.removeClass('loading error ready').addClass(contentClass).html(contentObj);
+            _this.showInfo(block, requestId, status);
         });
+    };
+    AttlazBase.showInfo = function (block, requestId, status) {
+        var infoBlock = jQuery('.' + requestId + '_info').first();
+        infoBlock.removeClass('loading error ready');
+        switch (status) {
+            case Status.State.Loading:
+                infoBlock.addClass('loading').fadeIn('slow');
+                break;
+            case Status.State.Error:
+                infoBlock.addClass('error').fadeIn('slow');
+                break;
+            case Status.State.Ready:
+                infoBlock.addClass('ready').fadeOut('slow');
+                break;
+        }
+        var width = block.width();
+        var height = block.height();
+        var left = block.offset().left + (width / 2) - (infoBlock.width() / 2);
+        var top = block.offset().top + (height / 2) - (infoBlock.height() / 2);
+        infoBlock.css('position', 'absolute').offset({ left: left, top: top }).fadeIn();
     };
     AttlazBase.currentRequestId = 0;
     AttlazBase.requestUrl = '/attlaz/realtime/productinfo';

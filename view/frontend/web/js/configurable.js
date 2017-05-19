@@ -15,13 +15,17 @@ define([
 
             $('.child_stock').hide();
             $('.child_price').hide();
+
             if (this.simpleProduct !== undefined) {
                 $('.child_stock_' + this.simpleProduct).show();
                 $('.child_price_' + this.simpleProduct).show();
+                $('.parent_price').hide();
+            }
+            else {
+                $('.parent_price').show();
+
             }
 
-            // AttlazBase.updateRequests();
-            //
         },
 
         _reloadPrice: function () {
@@ -32,6 +36,9 @@ define([
          * @private
          */
         _initializeOptions: function () {
+            $('.child_stock').hide();
+            $('.child_price').hide();
+
             var options = this.options,
                 gallery = $(options.mediaGallerySelector);
             //priceBoxOptions = $(this.options.priceHolderSelector).priceBox('option').priceConfig || null;
@@ -59,7 +66,7 @@ define([
                 this._onGalleryLoaded(gallery) :
                 gallery.on('gallery:loaded', this._onGalleryLoaded.bind(this, gallery));
 
-        }
+        },
     });
 
     return $.attlaz_base.configurable;
