@@ -4,7 +4,9 @@
 
     <preference for="Magento\Framework\Pricing\Render" type="Attlaz\Base\Pricing\Render"/>
     <preference for="Magento\Catalog\Pricing\Render\FinalPriceBox" type="Attlaz\Base\Pricing\Render\FinalPriceBox"/>
+
     <preference for="Magento\CatalogInventory\Block\Stockqty\DefaultStockqty" type="Attlaz\Base\Block\CatalogInventory\Stockqty\DefaultStockqty"/>
+    <preference for="Magento\ConfigurableProduct\Block\Stockqty\Type\Configurable" type="Attlaz\Base\Block\CatalogInventory\Stockqty\Type\Configurable"/>
 
     <type name="Attlaz\Base\Model\Resource\ProductRepository"/>
 
