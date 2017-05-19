@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Helper\RealTimeInfo;
 
-use Magento\Framework\App\Helper\AbstractHelper;
-use Attlaz\Model\Catalog\Product as AttlazProduct;
+use Attlaz\Base\Model\Catalog\Product as AttlazProduct;
 use Magento\Catalog\Model\Product as MagentoProduct;
+use Magento\Framework\App\Helper\AbstractHelper;
 
 class StockHelper extends AbstractHelper
 {
@@ -36,6 +36,5 @@ class StockHelper extends AbstractHelper
         }
 
         $magentoProduct->setData(self::FIELD_TEMP_STOCK_INFO, $stockInfo);
-
     }
 }

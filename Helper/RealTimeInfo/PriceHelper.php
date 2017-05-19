@@ -3,14 +3,14 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Helper\RealTimeInfo;
 
-use Magento\Framework\App\Helper\AbstractHelper;
-use Attlaz\Model\Catalog\Product as AttlazProduct;
-use Attlaz\Model\Catalog\ProductPrice;
+use Attlaz\Base\Model\Catalog\Product as AttlazProduct;
+use Attlaz\Base\Model\Catalog\ProductPrice;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Customer\Model\Group;
+use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\ObjectManagerInterface;
-use \Magento\Tax\Model\Config as TaxConfig;
+use Magento\Tax\Model\Config as TaxConfig;
 
 class PriceHelper extends AbstractHelper
 {
@@ -26,7 +26,6 @@ class PriceHelper extends AbstractHelper
 
     public function updateProductPriceWithAttlazData(MagentoProduct $magentoProduct, AttlazProduct $attlazProduct)
     {
-
         /** @var ProductPrice $basePrice */
         $basePrice = $attlazProduct->getPrice(1);
         if ($basePrice === null) {
@@ -46,9 +45,7 @@ class PriceHelper extends AbstractHelper
             } else {
                 $magentoProduct->setPrice($basePrice->baseIncl);
                 $magentoProduct->setSpecialPrice($basePrice->endIncl);
-
             }
-
         } else {
             //If the netto price is higher than the normal price, force the netto price
             if ($basePrice->endExcl > $basePrice->baseExcl && $forceNettoPriceWhenHigherThanNormal) {
@@ -58,7 +55,6 @@ class PriceHelper extends AbstractHelper
                 $magentoProduct->setPrice($basePrice->baseExcl);
                 $magentoProduct->setSpecialPrice($basePrice->endExcl);
             }
-
         }
 
         $startDate = date("Y-m-d", \strtotime('-2 hours'));
@@ -71,13 +67,10 @@ class PriceHelper extends AbstractHelper
         $magentoProduct->setSpecialToDateIsFormated(true);
 
         $this->setTierPrices($magentoProduct, $attlazProduct);
-
     }
 
     private function pricesIncludesTax(): bool
     {
-
-
         $priceDisplayType = $this->taxConfig->getPriceDisplayType();
         if ($priceDisplayType === TaxConfig::DISPLAY_TYPE_INCLUDING_TAX || $priceDisplayType === TaxConfig::DISPLAY_TYPE_BOTH) {
             return true;
@@ -91,7 +84,6 @@ class PriceHelper extends AbstractHelper
         $tierPrices = $attlazProduct->getPriceTiers();
         $personalTierPrices = [];
         if (count($tierPrices) > 1) {
-
             $i = 0;
             foreach ($tierPrices as $quantity) {
                 $linkProductTierPrice = $attlazProduct->getPrice($quantity);
@@ -112,7 +104,6 @@ class PriceHelper extends AbstractHelper
 
                 $i++;
             }
-
         }
 
         if (count($personalTierPrices) > 0) {

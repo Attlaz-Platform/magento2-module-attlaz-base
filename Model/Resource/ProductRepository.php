@@ -3,14 +3,13 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Resource;
 
-use Attlaz\Model\Catalog\Product;
-use Attlaz\Model\Catalog\ProductCollection;
-use Attlaz\Model\Catalog\ProductPrice;
-use Attlaz\Model\Catalog\ProductStock;
-use Attlaz\Model\Catalog\ProductStockLocation;
+use Attlaz\Base\Model\Catalog\Product;
+use Attlaz\Base\Model\Catalog\ProductCollection;
+use Attlaz\Base\Model\Catalog\ProductPrice;
+use Attlaz\Base\Model\Catalog\ProductStock;
+use Attlaz\Base\Model\Catalog\ProductStockLocation;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
-use GuzzleHttp\Psr7\Stream;
 use Psr\Log\LoggerInterface;
 
 class ProductRepository
@@ -24,7 +23,6 @@ class ProductRepository
 
     public function fetchProduct(string $productId, string $customerId): Product
     {
-
         $products = $this->fetchProducts([$productId], $customerId);
 
         $product = $products->getById($productId);
@@ -33,7 +31,6 @@ class ProductRepository
         }
 
         return $product;
-
     }
 
     public function fetchProducts(array $productIds, string $customerId): ProductCollection
@@ -44,19 +41,15 @@ class ProductRepository
         $totalProducts = new ProductCollection();
 
         try {
-
             $products = $this->getExternalData($productIds, $customerId);
 
             if ($products !== null) {
-
                 /** @var Product $product */
                 foreach ($products as $product) {
-
                     $totalProducts->addProduct($product);
                 }
             }
         } catch (\Exception $ex) {
-
             $this->logger->error($ex->getMessage(), ['ex' => $ex]);
         }
 
@@ -65,19 +58,14 @@ class ProductRepository
 
     private function getExternalData(array $productIds, string $customerId): ProductCollection
     {
-
-
         $result = new ProductCollection();
 
         $productInfo = $this->getProductInfo($productIds, $customerId);
 
         foreach ($productInfo as $productData) {
-
             if (!isset($productData['id'])) {
                 $this->logger->warning('Inalid response', $productData);
             } else {
-
-
                 $productId = $productData['id'];
                 $productInfoPrices = $productData['prices'];
                 $productInfoStock = $productData['stock'];
@@ -97,8 +85,6 @@ class ProductRepository
                 }
 
                 foreach ($productInfoStock as $locationCode => $stockLocation) {
-
-
                     $stock = new ProductStock(new ProductStockLocation(0, $locationCode));
                     $stock->setStock($stockLocation['stock']);
                     $stock->setData($stockLocation['data']);
@@ -107,11 +93,9 @@ class ProductRepository
 
                 $result->addProduct($p);
             }
-
         }
 
         return $result;
-
     }
 
     private function getProductInfo(array $productCodes, string $customerId): array

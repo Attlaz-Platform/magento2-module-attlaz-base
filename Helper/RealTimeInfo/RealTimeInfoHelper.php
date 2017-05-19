@@ -4,12 +4,12 @@ namespace Attlaz\Base\Helper\RealTimeInfo;
 
 use Attlaz\Base\Helper\CustomerHelper;
 use Attlaz\Base\Helper\Data;
-use Attlaz\Model\Catalog\Product as AttlazProduct;
-use Attlaz\Model\Catalog\ProductCollection as AttlazProductCollection;
+use Attlaz\Base\Model\Catalog\Product as AttlazProduct;
+use Attlaz\Base\Model\Catalog\ProductCollection as AttlazProductCollection;
+use Attlaz\Base\Model\Resource\ProductRepository;
 use Magento\Catalog\Model\Product as MagentoProduct;
 use Magento\Catalog\Model\ResourceModel\Product\Collection as MagentoProductCollection;
 use Magento\Framework\App\Helper\Context;
-use Attlaz\Base\Model\Resource\ProductRepository;
 
 class RealTimeInfoHelper extends Data
 {
@@ -33,23 +33,18 @@ class RealTimeInfoHelper extends Data
 
     public function updateProductWithExternalData(MagentoProduct $magentoProduct, $customerExternalId = null)
     {
-
         if ($this->shouldUpdateProductWithRealTimeInfo()) {
-
             if (!$customerExternalId && $this->customerHelper->hasCurrentCustomerExternalId()) {
                 $customerExternalId = $this->customerHelper->getCurrentCustomerExternalId();
             }
 
             if ($customerExternalId) {
-
                 try {
-
                     $productExternalId = $this->getExternalId($magentoProduct);
                     $attlazProductData = $this->productRepository->fetchProduct($productExternalId, $customerExternalId);
 
                     if ($attlazProductData) {
                         $this->appendExternalDataToProduct($magentoProduct, $attlazProductData);
-
                     } else {
                         echo 'No Attlaz data for externalId (product): ' . $productExternalId;
                     }
@@ -62,8 +57,6 @@ class RealTimeInfoHelper extends Data
 
     public function updateProductCollectionWithExternalData(MagentoProductCollection $magentoProducts)
     {
-
-
         if ($this->shouldUpdateProductWithRealTimeInfo() && $this->customerHelper->hasCurrentCustomerExternalId()) {
             try {
                 $customerExternalId = $this->customerHelper->getCurrentCustomerExternalId();
@@ -75,31 +68,23 @@ class RealTimeInfoHelper extends Data
             } catch (\Throwable $ex) {
                 $this->_logger->error('Unable to update product collection with real time info: ' . $ex->getMessage());
             }
-
         }
-
     }
 
     //<editor-fold desc="Append external data">
 
     private function appendExternalDataToProductCollection(MagentoProductCollection $magentoProducts, AttlazProductCollection $attlazProducts)
     {
-
-
         foreach ($magentoProducts as $magentoProduct) {
             $externalId = $this->getExternalId($magentoProduct);
             $attlazProduct = $attlazProducts->getById($externalId);
 
             if ($attlazProduct !== null) {
-
                 $this->appendExternalDataToProduct($magentoProduct, $attlazProduct);
-
             } else {
-
                 $this->_logger->warning('No Attlaz data for externalId: ' . $externalId . ' (available: ' . implode(', ', $attlazProducts->getIds()) . ')');
                 //throw new \Exception('No Attlaz product in collection for product (Magento product id: ' . $magentoProduct->getId() . ' - Magento product external id: ' . $externalId . ')');
             }
-
         }
     }
 
@@ -109,7 +94,6 @@ class RealTimeInfoHelper extends Data
         if ($this->useRealTimeStock()) {
             $this->stockHelper->updateProductStockWithAttlazData($magentoProduct, $attlazProduct);
         }
-
     }
 
     //</editor-fold>
@@ -129,7 +113,6 @@ class RealTimeInfoHelper extends Data
 
     public function useRealTimeStock(): bool
     {
-
         //TODO: debug
         return true;
 
