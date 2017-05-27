@@ -7,8 +7,8 @@
     "AFL-3.0"
   ],
   "require": {
-    "php": "~7.0.0",
-    "attlaz/client": "^1.0.0"
+    "php": "^7.0.0",
+    "attlaz/client": "^1.1.0"
   },
   "autoload": {
     "files": [
