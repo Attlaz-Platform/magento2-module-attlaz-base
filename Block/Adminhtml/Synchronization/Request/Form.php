@@ -151,7 +151,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
 //            'class'     => 'validate-css-length',
 //        ]);
 
-        $form->setValues(['external_ids' => 'mqsdkf']);
+        $form->setValues(['external_ids' => '']);
         $form->setUseContainer(true);
         $this->setForm($form);
 

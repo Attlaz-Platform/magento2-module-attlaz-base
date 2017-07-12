@@ -42,15 +42,16 @@ class Save extends \Magento\Backend\App\Action
             $externalIds = $this->getParamExternalIds();
             $skipImages = $this->getParamSkipImages();
             $result = $this->syncCatalogCommand->syncCatalog($externalIds, $skipImages);
+
             if ($result['success'] === true) {
                 $id = $result['id'];
-                $this->messageManager->addMessage('Synchronization is pending (task ' . id . ')');
+                $this->messageManager->addSuccessMessage('Synchronization is pending (Task: ' . $id . ')');
             } else {
                 $this->messageManager->addErrorMessage('Unable to sync catalog');
                 $this->logger->error('Unable to sync catalog: unknown issue');
             }
         } catch (\Throwable $ex) {
-            $this->messageManager->addErrorMessage('Unable to sync catalog');
+            $this->messageManager->addErrorMessage('Unable to sync catalog: ' . $ex->getMessage());
             //$this->logger->error('Unable to sync catalog: ' . $ex->getMessage());
         }
 
@@ -64,6 +65,7 @@ class Save extends \Magento\Backend\App\Action
                             ->getParam('external_ids');
 
         $arrExternalIds = \explode(\PHP_EOL, $externalIds);
+        $arrExternalIds = array_map('trim', $arrExternalIds);
 
         return $arrExternalIds;
     }
