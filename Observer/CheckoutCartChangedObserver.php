@@ -31,7 +31,10 @@ class CheckoutCartChangedObserver implements ObserverInterface
 
     private function getUpdatedPriceForProduct($product, $qty)
     {
-        return $product->getFinalPrice($qty);
+//        $finalPrice =  $product->getFinalPrice($qty);
+        $tierPrice = $product->getTierPrice($qty);
+
+        return $tierPrice;
     }
 
     private function setCustomPriceToItem($price, \Magento\Quote\Model\Quote\Item $item)
