@@ -23,6 +23,25 @@
                     <label>Branch</label>
                 </field>
             </group>
+            <group id="catalog" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Catalog</label>
+                <field id="display_prices_to_customer" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Prices are visible for</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
+                </field>
+                <field id="display_stock_to_customer" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stock is visible for</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
+                </field>
+                <field id="display_realtime_prices" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Realtime prices</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="display_realtime_stock" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Realtime stock</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
         </section>
     </system>
 </config>

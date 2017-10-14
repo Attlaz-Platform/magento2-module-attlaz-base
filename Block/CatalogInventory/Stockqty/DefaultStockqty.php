@@ -2,6 +2,7 @@
 
 namespace Attlaz\Base\Block\CatalogInventory\Stockqty;
 
+use Attlaz\Base\Helper\CatalogHelper;
 use Attlaz\Base\Helper\CustomerHelper;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\RealTime\RealTimeRenderHelper;
@@ -17,31 +18,27 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     private $customerHelper;
     private $realtimeRenderHelper;
     private $realTimeInfoHelper;
+    private $catalogHelper;
 
     public function __construct(
-        Context $context,
-        Registry $registry,
-        StockStateInterface $stockState,
-        StockRegistryInterface $stockRegistry,
+        Context $context, Registry $registry, StockStateInterface $stockState, StockRegistryInterface $stockRegistry,
 
-        CustomerHelper $customerHelper,
-        RealTimeInfoHelper $realTimeInfoHelper,
-        RealTimeRenderHelper $realtimeRenderHelper,
-        array $data = []
+        CustomerHelper $customerHelper, RealTimeInfoHelper $realTimeInfoHelper, RealTimeRenderHelper $realtimeRenderHelper, CatalogHelper $catalogHelper, array $data = []
     ) {
         parent::__construct($context, $registry, $stockState, $stockRegistry, $data);
         $this->_isScopePrivate = true;
         $this->customerHelper = $customerHelper;
         $this->realTimeInfoHelper = $realTimeInfoHelper;
         $this->realtimeRenderHelper = $realtimeRenderHelper;
+        $this->catalogHelper = $catalogHelper;
     }
 
     public function isMsgVisible()
     {
-        if ($this->getProduct()
-                 ->getTypeId() === 'configurable') {
-            //return false;
-        }
+//        if ($this->getProduct()
+//                 ->getTypeId() === 'configurable') {
+//            //return false;
+//        }
 
         return true;
     }
@@ -93,7 +90,7 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     {
         $html = '';
         if ($this->customerHelper->shouldDisplayStockInfo()) {
-            if (!$this->realTimeInfoHelper->useRealTimeStock() || $this->isRealTimeRender()) {
+            if (!$this->catalogHelper->shouldDisplayRealTimeStock() || $this->isRealTimeRender()) {
                 $html = parent::_toHtml();
             } else {
                 if ($this->customerHelper->shouldDisplayStockBeforeRealTimeUpdate()) {

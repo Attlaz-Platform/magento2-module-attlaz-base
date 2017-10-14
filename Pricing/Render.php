@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Pricing;
 
+use Attlaz\Base\Helper\CatalogHelper;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\RealTime\RealTimeRenderHelper;
 use Magento\Framework\Pricing\Render\Layout;
@@ -16,12 +17,14 @@ class Render extends \Magento\Framework\Pricing\Render
     private $customerHelper;
     /** @var RealTimeRenderHelper */
     private $realTimeRenderHelper;
+    private $catalogHelper;
 
-    public function __construct(Template\Context $context, Layout $priceLayout, CustomerHelper $customerHelper, RealTimeRenderHelper $realTimeRenderHelper, array $data = [])
+    public function __construct(Template\Context $context, Layout $priceLayout, CustomerHelper $customerHelper,CatalogHelper $catalogHelper, RealTimeRenderHelper $realTimeRenderHelper, array $data = [])
     {
         parent::__construct($context, $priceLayout, $data);
         $this->_isScopePrivate = true;
         $this->customerHelper = $customerHelper;
+        $this->catalogHelper = $catalogHelper;
         $this->realTimeRenderHelper = $realTimeRenderHelper;
     }
 

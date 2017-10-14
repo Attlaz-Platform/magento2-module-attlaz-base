@@ -88,8 +88,6 @@ class CustomerHelper extends Data
     public function hasCurrentCustomerExternalId(): bool
     {
         //TODO: there can be a customer external id for a not logged in customer
-        //TODO: remove debug
-        return true;
         if ($this->customerSession->isLoggedIn()) {
             $customer = $this->customerSession->getCustomer();
 
@@ -102,8 +100,6 @@ class CustomerHelper extends Data
 
     public function getCurrentCustomerExternalId(): string
     {
-        //TODO: remove debug
-        return 'debug';
 
         if ($this->customerSession->isLoggedIn()) {
             $customer = $this->customerSession->getCustomer();
@@ -111,8 +107,18 @@ class CustomerHelper extends Data
             return $this->getExternalId($customer);
         }
 
-        //TODO: return default customer external id
         return '';
     }
 
+    protected function getConfigShowPricesForCustomer(): int
+    {
+        //TODO: validate
+        return intval($this->scopeConfig->getValue('attlaz/catalog/display_prices_to_customer'));
+    }
+
+    protected function getConfigShowStockForCustomer(): int
+    {
+        //TODO: validate
+        return intval($this->scopeConfig->getValue('attlaz/catalog/display_stock_to_customer'));
+    }
 }

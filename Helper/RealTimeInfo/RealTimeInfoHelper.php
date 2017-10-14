@@ -2,6 +2,7 @@
 
 namespace Attlaz\Base\Helper\RealTimeInfo;
 
+use Attlaz\Base\Helper\CatalogHelper;
 use Attlaz\Base\Helper\CustomerHelper;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Catalog\Product as AttlazProduct;
@@ -17,11 +18,12 @@ class RealTimeInfoHelper extends Data
     /** @var CustomerHelper */
     private $customerHelper;
     private $productRepository;
+    private $catalogHelper;
 
     private $priceHelper;
     private $stockHelper;
 
-    public function __construct(Context $context, CustomerHelper $customerHelper, ProductRepository $productRepository, PriceHelper $priceHelper, StockHelper $stockHelper)
+    public function __construct(Context $context, CustomerHelper $customerHelper, ProductRepository $productRepository, PriceHelper $priceHelper, StockHelper $stockHelper, CatalogHelper $catalogHelper)
     {
         parent::__construct($context);
         $this->customerHelper = $customerHelper;
@@ -29,6 +31,7 @@ class RealTimeInfoHelper extends Data
 
         $this->priceHelper = $priceHelper;
         $this->stockHelper = $stockHelper;
+        $this->catalogHelper = $catalogHelper;
     }
 
     public function updateProductWithExternalData(MagentoProduct $magentoProduct, $customerExternalId = null)
@@ -71,7 +74,6 @@ class RealTimeInfoHelper extends Data
         }
     }
 
-    //<editor-fold desc="Append external data">
 
     private function appendExternalDataToProductCollection(MagentoProductCollection $magentoProducts, AttlazProductCollection $attlazProducts)
     {
@@ -91,12 +93,11 @@ class RealTimeInfoHelper extends Data
     private function appendExternalDataToProduct(MagentoProduct $magentoProduct, AttlazProduct $attlazProduct)
     {
         $this->priceHelper->updateProductPriceWithAttlazData($magentoProduct, $attlazProduct);
-        if ($this->useRealTimeStock()) {
+        if ($this->catalogHelper->shouldDisplayRealTimeStock()) {
             $this->stockHelper->updateProductStockWithAttlazData($magentoProduct, $attlazProduct);
         }
     }
 
-    //</editor-fold>
 
     private function getExternalIds(MagentoProductCollection $magentoProducts): array
     {
@@ -111,27 +112,10 @@ class RealTimeInfoHelper extends Data
         return $externalProductIds;
     }
 
-    public function useRealTimeStock(): bool
-    {
-        //TODO: debug
-        return true;
-
-        $value = intval($this->scopeConfig->getValue('attlaz/catalog/show_realtime_stock'));
-        if ($value === 1) {
-            return true;
-        }
-
-        return false;
-    }
-
-    public function useRealTimePrices(): bool
-    {
-        return true;
-    }
 
     private function shouldUpdateProductWithRealTimeInfo(): bool
     {
-        return $this->useRealTimeStock() || $this->useRealTimePrices();
+        return $this->catalogHelper->shouldDisplayRealTimeStock() || $this->catalogHelper->shouldDisplayRealTimePrice();
     }
 
 }
