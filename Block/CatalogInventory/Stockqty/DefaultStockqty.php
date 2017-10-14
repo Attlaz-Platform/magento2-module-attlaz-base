@@ -40,7 +40,7 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     {
         if ($this->getProduct()
                  ->getTypeId() === 'configurable') {
-            return false;
+            //return false;
         }
 
         return true;
