@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Resource;
 
 use Attlaz\Client;
+use Attlaz\Model\ScheduleTaskResult;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;
 
@@ -44,7 +45,7 @@ class BaseResource
         return $this->client;
     }
 
-    public function scheduleTask(string $command, array $arguments = [])
+    public function scheduleTask(string $command, array $arguments = []):ScheduleTaskResult
     {
         return $this->getClient()
                     ->scheduleTask($command, $arguments);

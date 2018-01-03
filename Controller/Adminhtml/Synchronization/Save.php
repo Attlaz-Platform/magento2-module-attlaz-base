@@ -3,6 +3,7 @@
 namespace Attlaz\Base\Controller\Adminhtml\Synchronization;
 
 use Attlaz\Base\Model\Command\SyncCatalogCommand;
+use Attlaz\Model\ScheduleTaskResult;
 use Magento\Framework\Controller\Result\RedirectFactory;
 use Psr\Log\LoggerInterface;
 
@@ -41,10 +42,11 @@ class Save extends \Magento\Backend\App\Action
         try {
             $externalIds = $this->getParamExternalIds();
             $skipImages = $this->getParamSkipImages();
+            /** @var ScheduleTaskResult $result */
             $result = $this->syncCatalogCommand->syncCatalog($externalIds, $skipImages);
 
-            if ($result['success'] === true) {
-                $id = $result['id'];
+            if ($result->isSuccess() ) {
+                $id = $result->getId();
                 $this->messageManager->addSuccessMessage('Synchronization is pending (Task: ' . $id . ')');
             } else {
                 $this->messageManager->addErrorMessage('Unable to sync catalog');

@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Command;
 
 use Attlaz\Base\Model\Resource\BaseResource;
+use Attlaz\Model\ScheduleTaskResult;
 
 class SyncCatalogCommand
 {
@@ -13,7 +14,7 @@ class SyncCatalogCommand
     {
         $this->resource = $baseResource;
     }
-    public function syncCatalog(array $externalIds, bool $skipImages): array
+    public function syncCatalog(array $externalIds, bool $skipImages):ScheduleTaskResult
     {
         $result = $this->resource->scheduleTask('syncCatalog', [
             'externalIds' => $externalIds,
