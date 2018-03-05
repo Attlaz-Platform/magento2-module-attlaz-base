@@ -1,9 +1,22 @@
 /// <reference path="../../../../node_modules/@types/jquery/index.d.ts" />
 'use strict';
-require(["jquery"], function ($) {
-    $(document).ready(function () {
-        AttlazBase.updateRequests();
-    });
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+/* jscs:disable */
+/* eslint-disable */
+define([
+    'jquery'
+], function ($) {
+    'use strict';
+    /**
+     * @param {Object} config
+     */
+    return function (config) {
+        console.log('Loaded', config);
+        AttlazBase.updateRequests(config);
+    };
 });
 var AttlazBase = /** @class */ (function () {
     function AttlazBase() {
@@ -11,7 +24,8 @@ var AttlazBase = /** @class */ (function () {
     AttlazBase.log = function (msg) {
         console.log('Attlaz: ', msg);
     };
-    AttlazBase.updateRequests = function () {
+    AttlazBase.updateRequests = function (config) {
+        this.requestUrl = config.endpoint;
         var requests = [];
         jQuery('[data-update-realtime]').each(function (i, elem) {
             var requestBlock = jQuery(elem);
