@@ -5,7 +5,7 @@
             <label>Attlaz</label>
             <tab>service</tab>
             <resource>Attlaz_Base::config_attlaz</resource>
-            <group id="api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>API</label>
                 <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Endpoint</label>
@@ -17,13 +17,13 @@
                     <label>Client Secret</label>
                 </field>
             </group>
-            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
                 <field id="branch" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Branch</label>
                 </field>
             </group>
-            <group id="catalog" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="catalog" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Catalog</label>
                 <field id="display_prices_to_customer" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Prices are visible for</label>
