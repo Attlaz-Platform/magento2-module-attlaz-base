@@ -86,11 +86,7 @@ class Render extends \Magento\Framework\Pricing\Render
         if ($saleableItem->getTypeId() === 'configurable') {
             return false;
         }
-
-        return true;
-        $value = intval($this->_scopeConfig->getValue('attlaz/catalog/show_realtime_stock'));
-
-        return ($value === 1);
+        return $this->catalogHelper->shouldDisplayRealTimeStock();
     }
 
     private function isRealTimePriceLoaded(): bool

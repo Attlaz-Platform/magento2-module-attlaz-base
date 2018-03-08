@@ -10,6 +10,7 @@ use Attlaz\Base\Helper\RealTimeInfo\RealTimeInfoHelper;
 use Attlaz\Base\Helper\RealTimeInfo\StockHelper;
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Api\StockStateInterface;
+use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Element\Template\Context;
 
@@ -37,7 +38,7 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     {
 //        if ($this->getProduct()
 //                 ->getTypeId() === 'configurable') {
-//            //return false;
+//            return false;
 //        }
 
         return true;
@@ -90,7 +91,7 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
     {
         $html = '';
         if ($this->customerHelper->shouldDisplayStockInfo()) {
-            if (!$this->catalogHelper->shouldDisplayRealTimeStock() || $this->isRealTimeRender()) {
+            if (!$this->shouldRenderRealTimeStock($this->getProduct()) || $this->isRealTimeRender()) {
                 $html = parent::_toHtml();
             } else {
                 if ($this->customerHelper->shouldDisplayStockBeforeRealTimeUpdate()) {
@@ -112,4 +113,12 @@ class DefaultStockqty extends \Magento\CatalogInventory\Block\Stockqty\DefaultSt
         return $this->hasData(Data::BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA);
     }
 
+    private function shouldRenderRealTimeStock(SaleableInterface $saleableItem): bool
+    {
+        if ($saleableItem->getTypeId() === 'configurable') {
+            return false;
+        }
+
+        return $this->catalogHelper->shouldDisplayRealTimeStock();
+    }
 }
