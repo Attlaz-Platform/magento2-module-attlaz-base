@@ -4,12 +4,12 @@ declare(strict_types=1);
 namespace Attlaz\Base\Pricing;
 
 use Attlaz\Base\Helper\CatalogHelper;
+use Attlaz\Base\Helper\CustomerHelper;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Helper\RealTime\RealTimeRenderHelper;
 use Magento\Framework\Pricing\Render\Layout;
 use Magento\Framework\Pricing\SaleableInterface;
 use Magento\Framework\View\Element\Template;
-use Attlaz\Base\Helper\CustomerHelper;
 
 class Render extends \Magento\Framework\Pricing\Render
 {
@@ -19,7 +19,7 @@ class Render extends \Magento\Framework\Pricing\Render
     private $realTimeRenderHelper;
     private $catalogHelper;
 
-    public function __construct(Template\Context $context, Layout $priceLayout, CustomerHelper $customerHelper,CatalogHelper $catalogHelper, RealTimeRenderHelper $realTimeRenderHelper, array $data = [])
+    public function __construct(Template\Context $context, Layout $priceLayout, CustomerHelper $customerHelper, CatalogHelper $catalogHelper, RealTimeRenderHelper $realTimeRenderHelper, array $data = [])
     {
         parent::__construct($context, $priceLayout, $data);
         $this->_isScopePrivate = true;
@@ -48,13 +48,10 @@ class Render extends \Magento\Framework\Pricing\Render
 
     public function render($priceCode, SaleableInterface $saleableItem, array $arguments = [])
     {
-
         $html = '<div class="price-box"></div>';
 
         if ($this->customerHelper->shouldDisplayPrices()) {
-
-
-            if ($this->shouldRenderRealTimePrice($saleableItem)) {
+            if ($this->shouldRenderRealTimePrice($saleableItem, $arguments)) {
                 if ($this->isRealTimePriceLoaded()) {
                     $html = parent::render($priceCode, $saleableItem, $arguments);
                 } else {
@@ -81,11 +78,15 @@ class Render extends \Magento\Framework\Pricing\Render
         return $html;
     }
 
-    private function shouldRenderRealTimePrice(SaleableInterface $saleableItem): bool
+    private function shouldRenderRealTimePrice(SaleableInterface $saleableItem, array $arguments = []): bool
     {
         if ($saleableItem->getTypeId() === 'configurable') {
             return false;
         }
+        if (isset($arguments['disable_realtime']) && $arguments['disable_realtime'] === true) {
+            return false;
+        }
+
         return $this->catalogHelper->shouldDisplayRealTimeStock();
     }
 
