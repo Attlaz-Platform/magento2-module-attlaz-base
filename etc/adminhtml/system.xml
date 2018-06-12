@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="attlaz" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
+            <label>Attlaz</label>
+            <tab>service</tab>
+            <resource>Attlaz_Base::config_attlaz</resource>
+            <group id="api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>API</label>
+                <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Endpoint</label>
+                </field>
+                <field id="client_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Id</label>
+                </field>
+                <field id="client_secret" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Client Secret</label>
+                </field>
+            </group>
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>General</label>
+                <field id="branch" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Branch</label>
+                </field>
+            </group>
+            <group id="catalog" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Catalog</label>
+                <field id="display_prices_to_customer" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Prices are visible for</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
+                </field>
+                <field id="display_stock_to_customer" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Stock is visible for</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
+                </field>
+                <field id="display_realtime_prices" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Realtime prices</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+                <field id="display_realtime_stock" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Realtime stock</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>

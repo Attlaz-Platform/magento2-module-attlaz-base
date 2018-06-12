@@ -1,0 +1,27 @@
+{
+  "name": "attlaz/magento2-module-attlaz-base",
+  "description": "Attlaz Magento2 Base Module",
+  "type": "magento2-module",
+  "license": [
+    "OSL-3.0",
+    "AFL-3.0"
+  ],
+  "require": {
+    "php": "^7.0.0",
+    "attlaz/client": "^1.1.0"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Attlaz\\Base\\": ""
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://packagist.echron.be/"
+    }
+  ]
+}

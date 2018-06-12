@@ -1,0 +1,19 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+// @codingStandardsIgnoreFile
+
+?>
+<?php /** @var $block \Attlaz\Base\Block\Attlaz */ ?>
+<script type="text/x-magento-init">
+{
+    "*": {
+        "Attlaz_Base/js/attlaz": {
+            "endpoint": "<?php echo $block->getEndPointUrl(); ?>"
+        }
+    }
+}
+</script>
