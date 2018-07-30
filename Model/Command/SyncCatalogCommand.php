@@ -14,12 +14,14 @@ class SyncCatalogCommand
     {
         $this->resource = $baseResource;
     }
-    public function syncCatalog(array $externalIds, bool $skipImages):ScheduleTaskResult
+
+    public function syncCatalog(array $externalIds, bool $skipImages): ScheduleTaskResult
     {
-        $result = $this->resource->scheduleTask('syncCatalog', [
-            'externalIds' => $externalIds,
-            'skipImages'  => $skipImages,
-        ]);
+        $result = $this->resource->getClient()
+                                 ->scheduleTaskByCommand($this->resource->getBranch(), 'syncCatalog', [
+                                     'externalIds' => $externalIds,
+                                     'skipImages'  => $skipImages,
+                                 ]);
 
         return $result;
     }

@@ -8,18 +8,9 @@ use Attlaz\Base\Model\Catalog\ProductCollection;
 use Attlaz\Base\Model\Catalog\ProductPrice;
 use Attlaz\Base\Model\Catalog\ProductStock;
 use Attlaz\Base\Model\Catalog\ProductStockLocation;
-use GuzzleHttp\Client;
-use GuzzleHttp\Psr7\Request;
-use Psr\Log\LoggerInterface;
 
-class ProductRepository
+class ProductRepository extends BaseResource
 {
-    private $logger;
-
-    public function __construct(LoggerInterface $logger)
-    {
-        $this->logger = $logger;
-    }
 
     public function fetchProduct(string $productId, string $customerId): Product
     {
@@ -100,46 +91,22 @@ class ProductRepository
 
     private function getProductInfo(array $productCodes, string $customerId): array
     {
-        //TODO: remove all of this!
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-        $scopeConfig = $objectManager->get('\Magento\Framework\App\Config\ScopeConfigInterface');
-        $client = new Client([
-            // Base URI is used with relative requests
-            'base_uri' => 'https://api.attlaz.com/',
-            // You can set any number of default request options.
-            'timeout'  => 2.0,
-        ]);
+        try {
+            $result = $this->getClient()
+                           ->scheduleTaskByCommand('getRealTimeProductInfo', [
 
-        $headers = [
-            'Auth'   => 'ar(534_|#[',
-            'Branch' => $scopeConfig->getValue('general/store_information/name', \Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-        ];
+                               "externalProductIds" => $productCodes,
+                               "externalCustomerId" => $customerId,
 
-        $data = [
-            'action'     => 'catalog/product/realtimeinfo',
-            'parameters' => [
-                'external_ids' => $productCodes,
-                'customer_id'  => $customerId,
-            ],
-        ];
+                           ], true);
 
-        $body = \json_encode($data);
-        $request = new Request('POST', 'https://api.attlaz.com/', $headers, $body);
+            return $result->result;
+        } catch (\Exception $ex) {
+            $this->logger->warning($ex->getMessage());
 
-        $response = $client->send($request, ['timeout' => 10]);
-
-        $response = $response->getBody()
-                             ->getContents();
-
-        $data = \json_decode($response, true);
-
-        $response = $data['response'];
-        if (!\is_array($response)) {
-            $this->logger->error('Invalid response: ' . \json_encode($response));
-            $response = [];
+            return [];
         }
 
-        return $response;
     }
 
     private function parsePrice(string $input): float
