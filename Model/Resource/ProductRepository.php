@@ -92,13 +92,12 @@ class ProductRepository extends BaseResource
     private function getProductInfo(array $productCodes, string $customerId): array
     {
         try {
-            $result = $this->getClient()
-                           ->scheduleTaskByCommand('getRealTimeProductInfo', [
+            $result = $this->executeTaskByCommand('getRealTimeProductInfo', [
 
-                               "externalProductIds" => $productCodes,
-                               "externalCustomerId" => $customerId,
+                "externalProductIds" => $productCodes,
+                "externalCustomerId" => $customerId,
 
-                           ], true);
+            ]);
 
             return $result->result;
         } catch (\Exception $ex) {
@@ -106,7 +105,6 @@ class ProductRepository extends BaseResource
 
             return [];
         }
-
     }
 
     private function parsePrice(string $input): float
