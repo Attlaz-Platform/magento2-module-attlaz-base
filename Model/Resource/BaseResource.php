@@ -20,7 +20,7 @@ class BaseResource
         $this->scopeConfig = $scopeConfig;
     }
 
-    protected function getClient(): Client
+    public function getClient(): Client
     {
         if (is_null($this->client)) {
             $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint');
@@ -39,20 +39,26 @@ class BaseResource
             }
 
             $this->client = new Client($endpoint, $clientId, $clientSecret);
-            $this->client->setBranch($branch);
         }
 
         return $this->client;
     }
 
-    public function scheduleTask(string $command, array $arguments = []):ScheduleTaskResult
+    public function getBranch(): string
     {
-        return $this->getClient()
-                    ->scheduleTask($command, $arguments);
+        return $this->scopeConfig->getValue('attlaz/general/branch');
     }
 
-    public function ping(): bool
+    public function executeTaskByCommand(string $command, array $arguments = []): ScheduleTaskResult
     {
+        return $this->getClient()
+                    ->scheduleTaskByCommand($this->getBranch(), $command, $arguments);
+    }
+
+    public function executeTask(string $task, array $arguments = []): ScheduleTaskResult
+    {
+        return $this->getClient()
+                    ->scheduleTask($task, $arguments);
     }
 
 }
