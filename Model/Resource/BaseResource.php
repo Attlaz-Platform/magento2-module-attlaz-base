@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Resource;
 
 use Attlaz\Client;
+use Attlaz\Model\ScheduleTaskResult;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;
 
@@ -46,6 +47,18 @@ class BaseResource
     public function getBranch(): string
     {
         return $this->scopeConfig->getValue('attlaz/general/branch');
+    }
+
+    public function executeTaskByCommand(string $command, array $arguments = []): ScheduleTaskResult
+    {
+        return $this->getClient()
+                    ->scheduleTaskByCommand($this->getBranch(), $command, $arguments);
+    }
+
+    public function executeTask(string $task, array $arguments = []): ScheduleTaskResult
+    {
+        return $this->getClient()
+                    ->scheduleTask($task, $arguments);
     }
 
 }
