@@ -19,27 +19,11 @@
             </group>
             <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
-                <field id="branch" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Branch</label>
+                <field id="project" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Project</label>
                 </field>
-            </group>
-            <group id="catalog" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Catalog</label>
-                <field id="display_prices_to_customer" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Prices are visible for</label>
-                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
-                </field>
-                <field id="display_stock_to_customer" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Stock is visible for</label>
-                    <source_model>Attlaz\Base\Model\Config\Source\CustomerType</source_model>
-                </field>
-                <field id="display_realtime_prices" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Realtime prices</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-                <field id="display_realtime_stock" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
-                    <label>Realtime stock</label>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                <field id="environment" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Environment</label>
                 </field>
             </group>
         </section>
