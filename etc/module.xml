@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Attlaz_Base" setup_version="1.0.2">
         <sequence>
-            <module name="Magento_ConfigurableProduct"/>
+            <module name="Magento_Core"/>
         </sequence>
     </module>
 </config>

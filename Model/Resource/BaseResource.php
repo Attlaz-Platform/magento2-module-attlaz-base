@@ -14,6 +14,9 @@ class BaseResource
     protected $scopeConfig;
     private $client;
 
+    private $projectKey;
+    private $environmentKey;
+
     public function __construct(ScopeConfigInterface $scopeConfig, LoggerInterface $logger)
     {
         $this->logger = $logger;
@@ -26,7 +29,8 @@ class BaseResource
             $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint');
             $clientId = $this->scopeConfig->getValue('attlaz/api/client_id');
             $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
-            $branch = $this->scopeConfig->getValue('attlaz/general/branch');
+            $this->projectKey = $this->scopeConfig->getValue('attlaz/general/project');
+            $this->environmentKey = $this->scopeConfig->getValue('attlaz/general/environment');
 
             if (empty($endpoint)) {
                 throw new \Exception('Invalid endpoint configuration (empty)');
@@ -42,17 +46,6 @@ class BaseResource
         }
 
         return $this->client;
-    }
-
-    public function getBranch(): string
-    {
-        return $this->scopeConfig->getValue('attlaz/general/branch');
-    }
-
-    public function executeTaskByCommand(string $command, array $arguments = []): ScheduleTaskResult
-    {
-        return $this->getClient()
-                    ->scheduleTaskByCommand($this->getBranch(), $command, $arguments);
     }
 
     public function executeTask(string $task, array $arguments = []): ScheduleTaskResult
