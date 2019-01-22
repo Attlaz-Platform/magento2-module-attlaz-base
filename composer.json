@@ -8,7 +8,7 @@
   ],
   "require": {
     "php": "^7.0.0",
-    "attlaz/client": "^1.3.0"
+    "attlaz/client": "^1.3.7"
   },
   "autoload": {
     "files": [
@@ -21,7 +21,7 @@
   "repositories": [
     {
       "type": "composer",
-      "url": "https://packagist.echron.be/"
+      "url": "https://repo.attlaz.com/"
     }
   ]
 }
