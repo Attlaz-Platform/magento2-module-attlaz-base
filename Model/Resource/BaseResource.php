@@ -56,7 +56,7 @@ class BaseResource
 
     public function getTaskIdentifier(string $task)
     {
-        return $this->scopeConfig->getValue('attlaz/task/' . $task);
+        return $this->scopeConfig->getValue('attlaz/tasks/' . $task);
     }
 
 }
