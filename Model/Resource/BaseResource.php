@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Resource;
 
 use Attlaz\Client;
-use Attlaz\Model\ScheduleTaskResult;
+use Attlaz\Model\TaskExecutionResult;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Psr\Log\LoggerInterface;
 
@@ -48,10 +48,16 @@ class BaseResource
         return $this->client;
     }
 
-    public function executeTask(string $task, array $arguments = []): ScheduleTaskResult
+    public function executeTask(string $task, array $arguments = []): TaskExecutionResult
     {
         return $this->getClient()
                     ->scheduleTask($task, $arguments);
     }
 
+    public function getTaskIdentifier(string $task)
+    {
+        return $this->scopeConfig->getValue('attlaz/task/' . $task);
+    }
+
 }
+
