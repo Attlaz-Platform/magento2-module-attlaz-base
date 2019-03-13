@@ -4,21 +4,21 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b4e9ae7168816015615c5322b6d59c67",
+    "content-hash": "2bf513cd4b6bc9047d199790f59107b1",
     "packages": [
         {
             "name": "attlaz/client",
-            "version": "1.3.7",
+            "version": "1.3.10",
             "source": {
                 "type": "git",
                 "url": "git@bitbucket.org:attlaz/php-client.git",
-                "reference": "b7d32745ac9f57b4d30248b106ed7d0037a91fc0"
+                "reference": "6609f4acd09c2ca34c0c17b16cca6321eb2ebd4c"
             },
             "dist": {
                 "type": "tar",
-                "url": "https://packagist.echron.be/dist/attlaz/client/attlaz-client-1.3.7-0a1166.tar",
-                "reference": "b7d32745ac9f57b4d30248b106ed7d0037a91fc0",
-                "shasum": "7ae40977867b635b7b52d69b2facf2546eef1234"
+                "url": "https://packagist.echron.be/dist/attlaz/client/attlaz-client-1.3.10-cc668a.tar",
+                "reference": "6609f4acd09c2ca34c0c17b16cca6321eb2ebd4c",
+                "shasum": "8132c58aae84f26ebd7c220eaa5ce2494ef139c7"
             },
             "require": {
                 "ext-json": "*",
@@ -38,7 +38,7 @@
                 "AFL-3.0"
             ],
             "description": "Attlaz PHP Client",
-            "time": "2019-01-21T15:06:16+00:00"
+            "time": "2019-02-18T17:31:24+00:00"
         },
         {
             "name": "guzzlehttp/guzzle",
@@ -480,7 +480,7 @@
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
-        "php": "^7.0.0"
+        "php": "~7.0.6|~7.1.0|~7.2.0"
     },
     "platform-dev": []
 }
