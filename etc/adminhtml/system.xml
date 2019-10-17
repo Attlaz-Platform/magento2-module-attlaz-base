@@ -19,11 +19,13 @@
             </group>
             <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
-                <field id="project" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="project" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Project</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\Project</source_model>
                 </field>
-                <field id="environment" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="environment" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Environment</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\ProjectEnvironment</source_model>
                 </field>
             </group>
             <group id="tasks" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
