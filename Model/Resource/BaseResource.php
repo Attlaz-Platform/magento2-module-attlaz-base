@@ -61,11 +61,10 @@ class BaseResource
 
     public function executeTask(
         string $task,
-        array $arguments = [],
-        int $projectEnvironmentId = null
+        array $arguments = []
     ): TaskExecutionResult {
         return $this->getClient()
-                    ->scheduleTask($task, $arguments, $this->getProjectEnvrionmentIdentifier());
+                    ->requestTaskExecution($task, $arguments, $this->getProjectEnvironmentIdentifier());
     }
 
     public function getTaskIdentifier(string $task)
