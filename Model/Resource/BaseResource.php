@@ -29,8 +29,6 @@ class BaseResource
             $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint');
             $clientId = $this->scopeConfig->getValue('attlaz/api/client_id');
             $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
-            $this->projectKey = $this->scopeConfig->getValue('attlaz/general/project');
-            $this->environmentKey = $this->scopeConfig->getValue('attlaz/general/environment');
 
             if (empty($endpoint)) {
                 throw new \Exception('Invalid endpoint configuration (empty)');
@@ -48,15 +46,46 @@ class BaseResource
         return $this->client;
     }
 
-    public function executeTask(string $task, array $arguments = []): TaskExecutionResult
+    public function hasClientConfiguration(): bool
     {
+        $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint');
+        $clientId = $this->scopeConfig->getValue('attlaz/api/client_id');
+        $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
+
+        if (!empty($endpoint) && !empty($clientId) && !empty($clientSecret)) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public function executeTask(
+        string $task,
+        array $arguments = [],
+        int $projectEnvironmentId = null
+    ): TaskExecutionResult {
         return $this->getClient()
-                    ->scheduleTask($task, $arguments);
+                    ->scheduleTask($task, $arguments, $this->getProjectEnvrionmentIdentifier());
     }
 
     public function getTaskIdentifier(string $task)
     {
-        return $this->scopeConfig->getValue('attlaz/tasks/' . $task);
+        return $this->scopeConfig->getValue('attlaz/tasks/' . $task . '_key');
+    }
+
+    public function getProjectIdentifier(): string
+    {
+        return $this->scopeConfig->getValue('attlaz/general/project');
+    }
+
+    public function getProjectEnvironmentIdentifier(): int
+    {
+        $projectEnvironmentId = $this->scopeConfig->getValue('attlaz/general/environment');
+        if (empty($projectEnvironmentId) || !\is_numeric($projectEnvironmentId)) {
+            throw new \Exception('Invalid project environment');
+        }
+
+        return \intval($projectEnvironmentId);
     }
 
 }
