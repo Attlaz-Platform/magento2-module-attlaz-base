@@ -1,15 +1,20 @@
 <?php
+declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
+use Attlaz\Base\Helper\Data;
+use Attlaz\Base\Model\Resource\BaseResource;
 use Magento\Framework\Option\ArrayInterface;
 
 class Project implements ArrayInterface
 {
+    private $dataHelper;
     private $baseResource;
 
-    public function __construct(\Attlaz\Base\Model\Resource\BaseResource $baseResource)
+    public function __construct(Data $dataHelper, BaseResource $baseResource)
     {
+        $this->dataHelper = $dataHelper;
         $this->baseResource = $baseResource;
     }
 
@@ -20,14 +25,14 @@ class Project implements ArrayInterface
     {
         //TODO: should we cache this?
         $result = [];
-        if ($this->baseResource->hasClientConfiguration()) {
+        $result[] = [
+            'value' => '',
+            'label' => __('--Please Select--'),
+        ];
+        if ($this->canFetchData()) {
             $projects = $this->baseResource->getClient()
                                            ->getProjects();
 
-            $result[] = [
-                'value' => '',
-                'label' => '',
-            ];
             foreach ($projects as $project) {
                 $result[] = [
                     'value' => $project->id,
@@ -37,5 +42,10 @@ class Project implements ArrayInterface
         }
 
         return $result;
+    }
+
+    private function canFetchData(): bool
+    {
+        return $this->dataHelper->hasClientConfiguration();
     }
 }
