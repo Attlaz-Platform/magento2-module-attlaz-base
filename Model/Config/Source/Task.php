@@ -7,7 +7,7 @@ use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
 use Magento\Framework\Option\ArrayInterface;
 
-class ProjectEnvironment implements ArrayInterface
+class Task implements ArrayInterface
 {
     private $dataHelper;
     private $baseResource;
@@ -29,15 +29,17 @@ class ProjectEnvironment implements ArrayInterface
             'value' => '',
             'label' => __('--Please Select--'),
         ];
-
         if ($this->canFetchData()) {
-            $projectEnvironments = $this->baseResource->getClient()
-                                                      ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
+            $tasks = $this->baseResource->getClient()
+                                        ->getTasks($this->dataHelper->getProjectIdentifier());
 
-            foreach ($projectEnvironments as $projectEnvironment) {
+            foreach ($tasks as $task) {
+                $label = $task->name . ' (' . $task->id . ')';
+                if ($task->state !== 'active') {
+                }
                 $result[] = [
-                    'value' => $projectEnvironment->id,
-                    'label' => $projectEnvironment->name,
+                    'value' => $task->id,
+                    'label' => $label,
                 ];
             }
         }
@@ -47,6 +49,6 @@ class ProjectEnvironment implements ArrayInterface
 
     private function canFetchData(): bool
     {
-        return $this->dataHelper->hasClientConfiguration() && $this->dataHelper->hasProjectIdentifier();
+        return $this->dataHelper->hasClientConfiguration() && $this->dataHelper->hasProjectIdentifier() && $this->dataHelper->hasProjectEnvironmentIdentifier();
     }
 }

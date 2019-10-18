@@ -1,8 +1,9 @@
 <?php
+declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
-use \Magento\Framework\Option\ArrayInterface;
+use Magento\Framework\Option\ArrayInterface;
 
 class CustomerType implements ArrayInterface
 {
@@ -16,7 +17,6 @@ class CustomerType implements ArrayInterface
      */
     public function toOptionArray()
     {
-
         return [
             [
                 'value' => self::TYPE_ALL,
