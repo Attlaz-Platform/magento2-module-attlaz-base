@@ -31,6 +31,10 @@
             <group id="tasks" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Tasks</label>
             </group>
+            <group id="branding" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Branding</label>
+                <frontend_model>Attlaz\Base\Block\System\Config\Form\Branding</frontend_model>
+            </group>
         </section>
     </system>
 </config>
