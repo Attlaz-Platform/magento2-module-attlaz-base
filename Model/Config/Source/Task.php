@@ -30,8 +30,8 @@ class Task implements ArrayInterface
             'label' => __('--Please Select--'),
         ];
         if ($this->canFetchData()) {
-            $tasks = $this->baseResource->getClient()
-                                        ->getTasks($this->dataHelper->getProjectIdentifier());
+            $tasks = $this->dataHelper->getClient()
+                ->getTasks($this->dataHelper->getProjectIdentifier());
 
             foreach ($tasks as $task) {
                 $label = $task->name . ' (' . $task->id . ')';
@@ -49,6 +49,6 @@ class Task implements ArrayInterface
 
     private function canFetchData(): bool
     {
-        return $this->dataHelper->hasClientConfiguration() && $this->dataHelper->hasProjectIdentifier() && $this->dataHelper->hasProjectEnvironmentIdentifier();
+        return !\is_null($this->dataHelper->getClient()) && $this->dataHelper->hasProjectIdentifier() && $this->dataHelper->hasProjectEnvironmentIdentifier();
     }
 }
