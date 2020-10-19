@@ -11,11 +11,13 @@ class Project implements ArrayInterface
 {
     private $dataHelper;
     private $baseResource;
+    private $messageManager;
 
-    public function __construct(Data $dataHelper, BaseResource $baseResource)
+    public function __construct(Data $dataHelper, BaseResource $baseResource, \Magento\Framework\Message\ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
         $this->baseResource = $baseResource;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -25,20 +27,30 @@ class Project implements ArrayInterface
     {
         //TODO: should we cache this?
         $result = [];
-        $result[] = [
-            'value' => '',
-            'label' => __('--Please Select--'),
-        ];
-        if ($this->canFetchData()) {
-            $projects = $this->baseResource->getClient()
-                                           ->getProjects();
 
-            foreach ($projects as $project) {
-                $result[] = [
-                    'value' => $project->id,
-                    'label' => $project->name,
-                ];
+        if ($this->canFetchData()) {
+
+            try {
+                $projects = $this->dataHelper->getClient()
+                    ->getProjects();
+
+                if (count($projects) !== 0) {
+                    $result[] = [
+                        'value' => '',
+                        'label' => __('--Please Select--'),
+                    ];
+                }
+
+                foreach ($projects as $project) {
+                    $result[] = [
+                        'value' => $project->id,
+                        'label' => $project->name . ' [' . $project->id . ']',
+                    ];
+                }
+            } catch (\Throwable $ex) {
+                $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $exception->getMessage());
             }
+
         }
 
         return $result;
@@ -46,6 +58,6 @@ class Project implements ArrayInterface
 
     private function canFetchData(): bool
     {
-        return $this->dataHelper->hasClientConfiguration();
+        return !\is_null($this->dataHelper->getClient());
     }
 }
