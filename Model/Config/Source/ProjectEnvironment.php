@@ -11,11 +11,13 @@ class ProjectEnvironment implements ArrayInterface
 {
     private $dataHelper;
     private $baseResource;
+    private $messageManager;
 
-    public function __construct(Data $dataHelper, BaseResource $baseResource)
+    public function __construct(Data $dataHelper, BaseResource $baseResource, \Magento\Framework\Message\ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
         $this->baseResource = $baseResource;
+        $this->messageManager = $messageManager;
     }
 
     /**
@@ -25,21 +27,30 @@ class ProjectEnvironment implements ArrayInterface
     {
         //TODO: should we cache this?
         $result = [];
-        $result[] = [
-            'value' => '',
-            'label' => __('--Please Select--'),
-        ];
+
 
         if ($this->canFetchData()) {
-            $projectEnvironments = $this->baseResource->getClient()
-                                                      ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
 
-            foreach ($projectEnvironments as $projectEnvironment) {
-                $result[] = [
-                    'value' => $projectEnvironment->id,
-                    'label' => $projectEnvironment->name,
-                ];
+            try {
+                $projectEnvironments = $this->dataHelper->getClient()
+                    ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
+                if (count($projectEnvironments) !== 0) {
+                    $result[] = [
+                        'value' => '',
+                        'label' => __('--Please Select--'),
+                    ];
+                }
+                foreach ($projectEnvironments as $projectEnvironment) {
+                    $result[] = [
+                        'value' => $projectEnvironment->id,
+                        'label' => $projectEnvironment->name . ' [' . $projectEnvironment->id . ']',
+                    ];
+                }
+
+            } catch (\Throwable $exception) {
+                $this->messageManager->addErrorMessage('Unable to fetch project environments: ' . $exception->getMessage());
             }
+
         }
 
         return $result;
@@ -47,6 +58,6 @@ class ProjectEnvironment implements ArrayInterface
 
     private function canFetchData(): bool
     {
-        return $this->dataHelper->hasClientConfiguration() && $this->dataHelper->hasProjectIdentifier();
+        return !\is_null($this->dataHelper->getClient()) && $this->dataHelper->hasProjectIdentifier();
     }
 }
