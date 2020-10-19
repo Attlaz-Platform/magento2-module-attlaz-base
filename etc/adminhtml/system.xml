@@ -9,12 +9,20 @@
                 <label>API</label>
                 <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Endpoint</label>
+                    <comment><![CDATA[Don’t change unless asked to do so.]]></comment>
+                    <config_path>attlaz/api/endpoint</config_path>
                 </field>
-                <field id="client_id" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="client_id" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Client Id</label>
+                    <comment><![CDATA[Your client id can be found on the <a href="https://app.attlaz.com/general/config" target="_blank">settings page</a> in the Attlaz app]]></comment>
+                    <config_path>attlaz/api/client_id</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="client_secret" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="client_secret" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Client Secret</label>
+                    <comment><![CDATA[Your client secret can be found on the <a href="https://app.attlaz.com/general/config" target="_blank">settings page</a> in the Attlaz app]]></comment>
+                    <config_path>attlaz/api/client_secret</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
             </group>
             <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">

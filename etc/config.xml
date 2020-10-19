@@ -4,6 +4,8 @@
         <attlaz>
             <api>
                 <endpoint>https://api.attlaz.com</endpoint>
+                <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </api>
         </attlaz>
     </default>
