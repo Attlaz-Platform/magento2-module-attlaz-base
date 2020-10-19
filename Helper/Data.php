@@ -3,42 +3,52 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Helper;
 
+use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\Helper\AbstractHelper;
 use Magento\Framework\DataObject;
-use Psr\Log\LoggerInterface;
+use Magento\Store\Model\ScopeInterface;
 
-class Data extends AbstractHelper
+class Data
 {
 
     const EXTERNAL_ID_FIELD = 'attlaz_external_id';
     const SYNC_TIME_FIELD = 'attlaz_sync_time';
     const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
 
-    protected $logger;
     protected $scopeConfig;
     private $client;
 
     private $projectKey;
     private $environmentKey;
 
-    public function __construct(ScopeConfigInterface $scopeConfig, LoggerInterface $logger)
+    public function __construct(ScopeConfigInterface $scopeConfig)
     {
-        $this->logger = $logger;
         $this->scopeConfig = $scopeConfig;
     }
 
     public function hasClientConfiguration(): bool
     {
-        $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint');
-        $clientId = $this->scopeConfig->getValue('attlaz/api/client_id');
+
+
+        $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint', ScopeInterface::SCOPE_STORE, null);
+        $clientId = $this->scopeConfig->getValue('attlaz/api/client_id', ScopeInterface::SCOPE_STORE, null);
         $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
 
-        if (!empty($endpoint) && !empty($clientId) && !empty($clientSecret)) {
-            return true;
+        return (!empty($endpoint) && !empty($clientId) && !empty($clientSecret));
+    }
+
+    public function getClient(): ?Client
+    {
+        if (is_null($this->client) && $this->hasClientConfiguration()) {
+
+            $endpoint = $this->getApiEndpoint();
+            $clientId = $this->getApiClientId();
+            $clientSecret = $this->getApiClientSecret();
+
+            $this->client = new Client($endpoint, $clientId, $clientSecret);
         }
 
-        return false;
+        return $this->client;
     }
 
     public function getApiEndpoint(): string
