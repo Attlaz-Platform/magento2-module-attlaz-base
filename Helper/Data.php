@@ -18,9 +18,6 @@ class Data
     protected $scopeConfig;
     private $client;
 
-    private $projectKey;
-    private $environmentKey;
-
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
@@ -91,21 +88,16 @@ class Data
         return !empty($this->scopeConfig->getValue('attlaz/general/project'));
     }
 
-    public function getProjectEnvironmentIdentifier(): int
+    public function getProjectEnvironmentIdentifier(): string
     {
-        $projectEnvironmentId = $this->scopeConfig->getValue('attlaz/general/environment');
-        if (empty($projectEnvironmentId) || !\is_numeric($projectEnvironmentId)) {
-            throw new \Exception('Invalid project environment');
-        }
-
-        return \intval($projectEnvironmentId);
+        return $this->scopeConfig->getValue('attlaz/general/environment');
     }
 
     public function hasProjectEnvironmentIdentifier(): bool
     {
         $projectEnvironmentId = $this->scopeConfig->getValue('attlaz/general/environment');
 
-        return !empty($projectEnvironmentId) && \is_numeric($projectEnvironmentId);
+        return !empty($projectEnvironmentId);
     }
 
     /**
