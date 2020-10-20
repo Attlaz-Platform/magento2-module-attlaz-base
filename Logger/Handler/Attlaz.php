@@ -53,8 +53,16 @@ class Attlaz extends AbstractHandler
             $level = Logger::DEBUG;
             $bubble = true;
 
-            $this->handler = new AttlazHandler($client, $level, $bubble);
-            $this->handler->setProject($this->dataHelper->getProjectIdentifier(), $this->dataHelper->getProjectEnvironmentIdentifier());
+
+            //try {
+                $handler = new AttlazHandler($client, $level, $bubble);
+                $handler->setProject($this->dataHelper->getProjectIdentifier(), $this->dataHelper->getProjectEnvironmentIdentifier());
+
+                $this->handler = $handler;
+//            } catch (\Throwable $ex) {
+//
+//            }
+
         }
 
 
