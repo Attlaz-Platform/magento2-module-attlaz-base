@@ -39,7 +39,15 @@
             <group id="tasks" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Tasks</label>
             </group>
-            <group id="branding" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="logging" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Logging</label>
+                <field id="bucket" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Bucket</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\LogBucket</source_model>
+                    <comment><![CDATA[Leave empty to disable. You can manage the buckets in <a href="https://app.attlaz.com/general/config" target="_blank">Attlaz app</a>]]></comment>
+                </field>
+            </group>
+            <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Branding</label>
                 <frontend_model>Attlaz\Base\Block\System\Config\Form\Branding</frontend_model>
             </group>
