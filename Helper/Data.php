@@ -42,7 +42,8 @@ class Data
             $clientId = $this->getApiClientId();
             $clientSecret = $this->getApiClientSecret();
 
-            $this->client = new Client($endpoint, $clientId, $clientSecret);
+            $this->client = new Client($clientId, $clientSecret);
+            $this->client->setEndPoint($endpoint);
         }
 
         return $this->client;
@@ -88,9 +89,10 @@ class Data
         return !empty($this->scopeConfig->getValue('attlaz/general/project'));
     }
 
-    public function getProjectEnvironmentIdentifier(): string
+    public function getProjectEnvironmentIdentifier(): int
     {
-        return $this->scopeConfig->getValue('attlaz/general/environment');
+        $projectEnvironmentIdentifier = $this->scopeConfig->getValue('attlaz/general/environment');
+        return \intval($projectEnvironmentIdentifier);
     }
 
     public function hasProjectEnvironmentIdentifier(): bool
@@ -98,6 +100,16 @@ class Data
         $projectEnvironmentId = $this->scopeConfig->getValue('attlaz/general/environment');
 
         return !empty($projectEnvironmentId);
+    }
+
+    public function hasLogBucket(): bool
+    {
+        return !empty($this->scopeConfig->getValue('attlaz/logging/bucket'));
+    }
+
+    public function getLogBucketIdentifier(): int
+    {
+        return $this->scopeConfig->getValue('attlaz/logging/bucket');
     }
 
     /**
