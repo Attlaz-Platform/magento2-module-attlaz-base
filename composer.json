@@ -2,12 +2,16 @@
   "name": "attlaz/magento2-module-attlaz-base",
   "description": "Attlaz Magento2 Base Module",
   "type": "magento2-module",
-  "license": [
-    "OSL-3.0",
-    "AFL-3.0"
+  "license": "MIT",
+  "homepage": "https://attlaz.com",
+  "keywords": [
+    "attlaz",
+    "ipaas",
+    "connection",
+    "synchronize"
   ],
   "require": {
-    "php": "~7.1.0|~7.2.0|~7.3.0|~7.4.0",
+    "php": ">=7.2 | >=8.0",
     "attlaz/client": "^1.5.2",
     "attlaz/attlaz-monolog": "0.0.*|^1.0.0"
   },
@@ -18,11 +22,5 @@
     "psr-4": {
       "Attlaz\\Base\\": ""
     }
-  },
-  "repositories": [
-    {
-      "type": "composer",
-      "url": "https://repo.attlaz.com/"
-    }
-  ]
+  }
 }
