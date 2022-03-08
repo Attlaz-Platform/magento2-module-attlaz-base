@@ -5,6 +5,7 @@ namespace Attlaz\Base\Logger\Handler;
 
 use Attlaz\AttlazMonolog\Handler\AttlazHandler;
 use Attlaz\Base\Helper\Data;
+use Attlaz\Model\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
@@ -60,8 +61,8 @@ class Attlaz extends AbstractHandler
 
 
                 //try {
-                $handler = new AttlazHandler($client, $level, $bubble);
-                $handler->setProject($this->dataHelper->getProjectIdentifier(), $this->dataHelper->getProjectEnvironmentIdentifier());
+                $handler = new AttlazHandler($client, new LogStreamId($this->dataHelper->getLogStreamId()), $level, $bubble);
+
 
                 $this->handler = $handler;
 //            } catch (\Throwable $ex) {
