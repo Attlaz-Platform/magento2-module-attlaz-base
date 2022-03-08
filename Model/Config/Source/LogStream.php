@@ -7,7 +7,7 @@ use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
 use Magento\Framework\Option\ArrayInterface;
 
-class LogBucket implements ArrayInterface
+class LogStream implements ArrayInterface
 {
     private $dataHelper;
     private $baseResource;
@@ -34,22 +34,22 @@ class LogBucket implements ArrayInterface
             try {
 //                $projectEnvironments = $this->dataHelper->getClient()
 //                    ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
-                $logBuckets = [];
-                if (count($logBuckets) !== 0) {
+                $logStreams = [];
+                if (count($logStreams) !== 0) {
                     $result[] = [
                         'value' => '',
                         'label' => __('--Please Select--'),
                     ];
                 }
-                foreach ($logBuckets as $logBucket) {
+                foreach ($logStreams as $logStream) {
                     $result[] = [
-                        'value' => $logBucket->id,
-                        'label' => $logBucket->name . ' [' . $logBucket->id . ']',
+                        'value' => $logStream->id,
+                        'label' => $logStream->name . ' [' . $logStream->id . ']',
                     ];
                 }
 
             } catch (\Throwable $exception) {
-                $this->messageManager->addErrorMessage('Unable to fetch log buckets: ' . $exception->getMessage());
+                $this->messageManager->addErrorMessage('Unable to fetch log log streams: ' . $exception->getMessage());
             }
 
         }
