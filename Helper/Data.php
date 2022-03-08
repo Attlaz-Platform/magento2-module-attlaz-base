@@ -102,14 +102,14 @@ class Data
         return !empty($projectEnvironmentId);
     }
 
-    public function hasLogBucket(): bool
+    public function hasLogStream(): bool
     {
-        return !empty($this->scopeConfig->getValue('attlaz/logging/bucket'));
+        return !empty($this->scopeConfig->getValue('attlaz/logging/logstream'));
     }
 
-    public function getLogBucketIdentifier(): int
+    public function getLogStreamId(): string
     {
-        return $this->scopeConfig->getValue('attlaz/logging/bucket');
+        return $this->scopeConfig->getValue('attlaz/logging/logstream');
     }
 
     /**

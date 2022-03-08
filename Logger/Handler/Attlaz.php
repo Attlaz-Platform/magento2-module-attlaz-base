@@ -26,7 +26,7 @@ class Attlaz extends AbstractHandler
 
     public function handle(array $record): bool
     {
-        if (!$this->dataHelper->hasLogBucket()) {
+        if (!$this->dataHelper->hasLogStream()) {
             return false;
         }
 
@@ -46,7 +46,7 @@ class Attlaz extends AbstractHandler
         $this->initialize = true;
         $client = null;
 
-        if ($this->dataHelper->hasLogBucket()) {
+        if ($this->dataHelper->hasLogStream()) {
 
 
             try {
