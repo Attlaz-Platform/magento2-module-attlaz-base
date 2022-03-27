@@ -5,9 +5,8 @@ namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
-use Magento\Framework\Option\ArrayInterface;
 
-class Project implements ArrayInterface
+class Project implements \Magento\Framework\Data\OptionSourceInterface
 {
     private $dataHelper;
     private $baseResource;
@@ -48,7 +47,7 @@ class Project implements ArrayInterface
                     ];
                 }
             } catch (\Throwable $ex) {
-                $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $exception->getMessage());
+                $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $ex->getMessage());
             }
 
         }

@@ -5,9 +5,8 @@ namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
-use Magento\Framework\Option\ArrayInterface;
 
-class LogStream implements ArrayInterface
+class LogStream implements \Magento\Framework\Data\OptionSourceInterface
 {
     private $dataHelper;
     private $baseResource;
@@ -32,9 +31,9 @@ class LogStream implements ArrayInterface
         if ($this->canFetchData()) {
 
             try {
-//                $projectEnvironments = $this->dataHelper->getClient()
-//                    ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
-                $logStreams = [];
+                $logStreams = $this->dataHelper->getClient()->getLogEndpoint()->getLogStreams($this->dataHelper->getProjectIdentifier());
+
+
                 if (count($logStreams) !== 0) {
                     $result[] = [
                         'value' => '',
@@ -43,8 +42,8 @@ class LogStream implements ArrayInterface
                 }
                 foreach ($logStreams as $logStream) {
                     $result[] = [
-                        'value' => $logStream->id,
-                        'label' => $logStream->name . ' [' . $logStream->id . ']',
+                        'value' => $logStream->getId(),
+                        'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
                     ];
                 }
 

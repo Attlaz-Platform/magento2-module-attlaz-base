@@ -46,6 +46,11 @@
                     <source_model>Attlaz\Base\Model\Config\Source\LogStream</source_model>
                     <comment><![CDATA[Leave empty to disable. You can manage the log streams in <a href="https://app.attlaz.com/general/config" target="_blank">Attlaz app</a>]]></comment>
                 </field>
+                <field id="minloglevel" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                    <label>Minimum log level</label>
+                    <source_model>Attlaz\Base\Model\Config\Source\MinLogLevel</source_model>
+                    <comment><![CDATA[Set the minimum log level to store, only log entries with a level higher will be logged]]></comment>
+                </field>
             </group>
             <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Branding</label>

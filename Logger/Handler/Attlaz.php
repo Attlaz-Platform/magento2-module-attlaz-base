@@ -5,28 +5,32 @@ namespace Attlaz\Base\Logger\Handler;
 
 use Attlaz\AttlazMonolog\Handler\AttlazHandler;
 use Attlaz\Base\Helper\Data;
-use Attlaz\Model\LogStreamId;
+use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
 class Attlaz extends AbstractHandler
 {
 
-    private $dataHelper;
-
-    /** @var AttlazHandler */
-    private $handler;
-    private $initialized = false;
+    private Data $dataHelper;
+    private ?AttlazHandler $handler = null;
+    private bool $initialized = false;
 
     public function __construct(Data $dataHelper)
     {
-        parent::__construct(Logger::DEBUG, true);
+        $minLogLevel = $dataHelper->getMinLogLevel();
+        parent::__construct($minLogLevel, true);
         $this->dataHelper = $dataHelper;
     }
 
 
     public function handle(array $record): bool
     {
+        if ($record['level'] < $this->level) {
+            return false;
+        }
+
+
         if (!$this->dataHelper->hasLogStream()) {
             return false;
         }
@@ -44,7 +48,7 @@ class Attlaz extends AbstractHandler
 
     private function initialize(): void
     {
-        $this->initialize = true;
+        $this->initialized = true;
         $client = null;
 
         if ($this->dataHelper->hasLogStream()) {
