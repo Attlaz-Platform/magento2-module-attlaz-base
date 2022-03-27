@@ -5,9 +5,8 @@ namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
-use Magento\Framework\Option\ArrayInterface;
 
-class ProjectEnvironment implements ArrayInterface
+class ProjectEnvironment implements \Magento\Framework\Data\OptionSourceInterface
 {
     private $dataHelper;
     private $baseResource;

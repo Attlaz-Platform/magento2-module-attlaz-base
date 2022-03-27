@@ -7,6 +7,9 @@
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </api>
+            <logging>
+                <minloglevel>200</minloglevel>
+            </logging>
         </attlaz>
     </default>
 </config>
