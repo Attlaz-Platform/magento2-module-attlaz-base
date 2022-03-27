@@ -112,6 +112,16 @@ class Data
         return $this->scopeConfig->getValue('attlaz/logging/logstream');
     }
 
+    public function getMinLogLevel(): int
+    {
+        $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
+        if (empty($key)) {
+            return 200;
+        }
+        return \intval($key);
+
+    }
+
     /**
      * TODO: refactor following to different external id helper
      */
