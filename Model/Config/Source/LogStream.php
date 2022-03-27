@@ -5,9 +5,8 @@ namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Base\Model\Resource\BaseResource;
-use Magento\Framework\Option\ArrayInterface;
 
-class LogBucket implements ArrayInterface
+class LogStream implements \Magento\Framework\Data\OptionSourceInterface
 {
     private $dataHelper;
     private $baseResource;
@@ -32,24 +31,24 @@ class LogBucket implements ArrayInterface
         if ($this->canFetchData()) {
 
             try {
-//                $projectEnvironments = $this->dataHelper->getClient()
-//                    ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
-                $logBuckets = [];
-                if (count($logBuckets) !== 0) {
+                $logStreams = $this->dataHelper->getClient()->getLogEndpoint()->getLogStreams($this->dataHelper->getProjectIdentifier());
+
+
+                if (count($logStreams) !== 0) {
                     $result[] = [
                         'value' => '',
                         'label' => __('--Please Select--'),
                     ];
                 }
-                foreach ($logBuckets as $logBucket) {
+                foreach ($logStreams as $logStream) {
                     $result[] = [
-                        'value' => $logBucket->id,
-                        'label' => $logBucket->name . ' [' . $logBucket->id . ']',
+                        'value' => $logStream->getId(),
+                        'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
                     ];
                 }
 
             } catch (\Throwable $exception) {
-                $this->messageManager->addErrorMessage('Unable to fetch log buckets: ' . $exception->getMessage());
+                $this->messageManager->addErrorMessage('Unable to fetch log log streams: ' . $exception->getMessage());
             }
 
         }

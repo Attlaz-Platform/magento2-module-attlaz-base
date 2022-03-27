@@ -5,28 +5,33 @@ namespace Attlaz\Base\Logger\Handler;
 
 use Attlaz\AttlazMonolog\Handler\AttlazHandler;
 use Attlaz\Base\Helper\Data;
+use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
 class Attlaz extends AbstractHandler
 {
 
-    private $dataHelper;
-
-    /** @var AttlazHandler */
-    private $handler;
-    private $initialized = false;
+    private Data $dataHelper;
+    private ?AttlazHandler $handler = null;
+    private bool $initialized = false;
 
     public function __construct(Data $dataHelper)
     {
-        parent::__construct(Logger::DEBUG, true);
+        $minLogLevel = $dataHelper->getMinLogLevel();
+        parent::__construct($minLogLevel, true);
         $this->dataHelper = $dataHelper;
     }
 
 
     public function handle(array $record): bool
     {
-        if (!$this->dataHelper->hasLogBucket()) {
+        if ($record['level'] < $this->level) {
+            return false;
+        }
+
+
+        if (!$this->dataHelper->hasLogStream()) {
             return false;
         }
 
@@ -43,10 +48,10 @@ class Attlaz extends AbstractHandler
 
     private function initialize(): void
     {
-        $this->initialize = true;
+        $this->initialized = true;
         $client = null;
 
-        if ($this->dataHelper->hasLogBucket()) {
+        if ($this->dataHelper->hasLogStream()) {
 
 
             try {
@@ -60,8 +65,8 @@ class Attlaz extends AbstractHandler
 
 
                 //try {
-                $handler = new AttlazHandler($client, $level, $bubble);
-                $handler->setProject($this->dataHelper->getProjectIdentifier(), $this->dataHelper->getProjectEnvironmentIdentifier());
+                $handler = new AttlazHandler($client, new LogStreamId($this->dataHelper->getLogStreamId()), $level, $bubble);
+
 
                 $this->handler = $handler;
 //            } catch (\Throwable $ex) {
