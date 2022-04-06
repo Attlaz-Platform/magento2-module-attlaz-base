@@ -6,7 +6,7 @@ namespace Attlaz\Base\Model;
 abstract class AbstractCollection implements \Iterator, \Countable
 {
 
-    protected $collection;
+    protected array $collection;
 
     public function __construct()
     {

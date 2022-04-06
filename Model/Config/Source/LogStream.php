@@ -4,18 +4,15 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
-use Attlaz\Base\Model\Resource\BaseResource;
 
 class LogStream implements \Magento\Framework\Data\OptionSourceInterface
 {
-    private $dataHelper;
-    private $baseResource;
-    private $messageManager;
+    private Data $dataHelper;
+    private \Magento\Framework\Message\ManagerInterface $messageManager;
 
-    public function __construct(Data $dataHelper, BaseResource $baseResource, \Magento\Framework\Message\ManagerInterface $messageManager)
+    public function __construct(Data $dataHelper, \Magento\Framework\Message\ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
-        $this->baseResource = $baseResource;
         $this->messageManager = $messageManager;
     }
 
