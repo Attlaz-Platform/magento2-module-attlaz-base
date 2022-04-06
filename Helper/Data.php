@@ -15,8 +15,8 @@ class Data
     const SYNC_TIME_FIELD = 'attlaz_sync_time';
     const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
 
-    protected $scopeConfig;
-    private $client;
+    protected ScopeConfigInterface $scopeConfig;
+    private ?Client $client = null;
 
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
@@ -89,17 +89,14 @@ class Data
         return !empty($this->scopeConfig->getValue('attlaz/general/project'));
     }
 
-    public function getProjectEnvironmentIdentifier(): int
+    public function getProjectEnvironmentIdentifier(): string
     {
-        $projectEnvironmentIdentifier = $this->scopeConfig->getValue('attlaz/general/environment');
-        return \intval($projectEnvironmentIdentifier);
+        return $this->scopeConfig->getValue('attlaz/general/environment');
     }
 
     public function hasProjectEnvironmentIdentifier(): bool
     {
-        $projectEnvironmentId = $this->scopeConfig->getValue('attlaz/general/environment');
-
-        return !empty($projectEnvironmentId);
+        return !empty($this->scopeConfig->getValue('attlaz/general/environment'));
     }
 
     public function hasLogStream(): bool
