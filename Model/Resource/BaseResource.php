@@ -10,9 +10,9 @@ use Psr\Log\LoggerInterface;
 
 class BaseResource
 {
-    protected $logger;
-    protected $dataHelper;
-    
+    protected LoggerInterface $logger;
+    protected Data $dataHelper;
+
     public function __construct(Data $dataHelper, LoggerInterface $logger)
     {
         $this->dataHelper = $dataHelper;
