@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
-use Magento\Framework\Option\ArrayInterface;
 
-class CustomerType implements ArrayInterface
+use Magento\Framework\Data\OptionSourceInterface;
+
+class CustomerType implements OptionSourceInterface
 {
     const TYPE_ALL = 0;
     const TYPE_NONE = 1;

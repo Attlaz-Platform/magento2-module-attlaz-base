@@ -101,7 +101,11 @@ class Data
 
     public function hasLogStream(): bool
     {
-        return !empty($this->scopeConfig->getValue('attlaz/logging/logstream'));
+        try {
+            return !empty($this->scopeConfig->getValue('attlaz/logging/logstream'));
+        } catch (\Throwable $ex) {
+            return false;
+        }
     }
 
     public function getLogStreamId(): string
@@ -111,7 +115,12 @@ class Data
 
     public function getMinLogLevel(): int
     {
-        $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
+        $key = null;
+        try {
+            $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
+        } catch (\Throwable $ex) {
+        }
+
         if (empty($key)) {
             return 200;
         }
