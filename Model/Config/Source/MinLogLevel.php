@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
+use Magento\Framework\Data\OptionSourceInterface;
 use Monolog\Logger;
 
-class MinLogLevel implements \Magento\Framework\Data\OptionSourceInterface
+class MinLogLevel implements OptionSourceInterface
 {
 
 

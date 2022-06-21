@@ -4,13 +4,15 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Message\ManagerInterface;
 
-class LogStream implements \Magento\Framework\Data\OptionSourceInterface
+class LogStream implements OptionSourceInterface
 {
     private Data $dataHelper;
-    private \Magento\Framework\Message\ManagerInterface $messageManager;
+    private ManagerInterface $messageManager;
 
-    public function __construct(Data $dataHelper, \Magento\Framework\Message\ManagerInterface $messageManager)
+    public function __construct(Data $dataHelper, ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
         $this->messageManager = $messageManager;

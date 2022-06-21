@@ -1,5 +1,6 @@
 {
   "name": "attlaz/magento2-module-attlaz-base",
+  "version": "2.4.0",
   "description": "Attlaz Magento2 Base Module",
   "type": "magento2-module",
   "license": "MIT",
@@ -11,9 +12,11 @@
     "synchronize"
   ],
   "require": {
-    "php": ">=7.4 | >=8.0",
+    "php": ">=7.4 | >=8.0 | >=8.1",
     "attlaz/client": "^1.7.6",
-    "attlaz/attlaz-monolog": "0.0.*|^1.1.3"
+    "attlaz/attlaz-monolog": "0.0.*|^1.1.3",
+    "magento/framework": ">=100 | >=101 | >=102 | >=103",
+    "magento/module-store": ">=100 | >=101 | >=102 | >=103"
   },
   "autoload": {
     "files": [
@@ -21,6 +24,17 @@
     ],
     "psr-4": {
       "Attlaz\\Base\\": ""
+    }
+  },
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://repo.magento.com/"
+    }
+  ],
+  "config": {
+    "allow-plugins": {
+      "magento/composer-dependency-version-audit-plugin": true
     }
   }
 }
