@@ -28,37 +28,37 @@ abstract class AbstractCollection implements \Iterator, \Countable
         return strtolower((string)$id);
     }
 
-    public function getIds()
+    public function getIds(): array
     {
         return array_keys($this->collection);
     }
 
-    public function current()
+    public function current(): mixed
     {
         return current($this->collection);
     }
 
-    public function next()
+    public function next(): void
     {
-        return next($this->collection);
+        next($this->collection);
     }
 
-    public function key()
+    public function key(): mixed
     {
         return key($this->collection);
     }
 
-    public function valid()
+    public function valid(): bool
     {
         return !!current($this->collection);
     }
 
-    public function rewind()
+    public function rewind(): void
     {
         reset($this->collection);
     }
 
-    public function count()
+    public function count(): int
     {
         return count($this->collection);
     }
