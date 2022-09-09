@@ -10,23 +10,32 @@ use Magento\Store\Model\ScopeInterface;
 
 class Data
 {
-
-    const EXTERNAL_ID_FIELD = 'attlaz_external_id';
-    const SYNC_TIME_FIELD = 'attlaz_sync_time';
-    const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
-
+    /** @var string */
+    public const EXTERNAL_ID_FIELD = 'attlaz_external_id';
+    /** @var string */
+    public const SYNC_TIME_FIELD = 'attlaz_sync_time';
+    /** @var string */
+    public const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
+    /** @var ScopeConfigInterface */
     protected ScopeConfigInterface $scopeConfig;
+    /** @var Client|null */
     private ?Client $client = null;
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
+    /**
+     * Determine if client is configured
+     *
+     * @return bool
+     */
     public function hasClientConfiguration(): bool
     {
-
-
         $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint', ScopeInterface::SCOPE_STORE, null);
         $clientId = $this->scopeConfig->getValue('attlaz/api/client_id', ScopeInterface::SCOPE_STORE, null);
         $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
@@ -34,9 +43,14 @@ class Data
         return (!empty($endpoint) && !empty($clientId) && !empty($clientSecret));
     }
 
+    /**
+     * Get Attlaz client
+     *
+     * @return Client|null
+     */
     public function getClient(): ?Client
     {
-        if (is_null($this->client) && $this->hasClientConfiguration()) {
+        if ($this->client === null && $this->hasClientConfiguration()) {
 
             $endpoint = $this->getApiEndpoint();
             $clientId = $this->getApiClientId();
@@ -49,56 +63,114 @@ class Data
         return $this->client;
     }
 
+    /**
+     * Get API endpoint
+     *
+     * @return string
+     */
     public function getApiEndpoint(): string
     {
         return $this->scopeConfig->getValue('attlaz/api/endpoint');
     }
 
+    /**
+     * Get API client id
+     *
+     * @return string
+     */
     public function getApiClientId(): string
     {
         return $this->scopeConfig->getValue('attlaz/api/client_id');
     }
 
+    /**
+     * Get API client secret
+     *
+     * @return string
+     */
     public function getApiClientSecret(): string
     {
         return $this->scopeConfig->getValue('attlaz/api/client_secret');
     }
 
+    /**
+     * Get task identifier
+     *
+     * @param string $task
+     * @return string
+     */
     public function getTaskIdentifier(string $task): string
     {
         return $this->scopeConfig->getValue($this->formatTaskIdentifierConfigPath($task));
     }
 
+    /**
+     * Determine if task identifier is configured
+     *
+     * @param string $task
+     * @return bool
+     */
     public function hasTaskIdentifier(string $task): bool
     {
         return !empty($this->scopeConfig->getValue($this->formatTaskIdentifierConfigPath($task)));
     }
 
+    /**
+     * Format task identifier configuration path
+     *
+     * @param string $task
+     * @return string
+     */
     private function formatTaskIdentifierConfigPath(string $task): string
     {
         return 'attlaz/tasks/' . $task . '_key';
     }
 
+    /**
+     * Get project identifier
+     *
+     * @return string
+     */
     public function getProjectIdentifier(): string
     {
         return $this->scopeConfig->getValue('attlaz/general/project');
     }
 
+    /**
+     * Determine if project identifier is configured
+     *
+     * @return bool
+     */
     public function hasProjectIdentifier(): bool
     {
         return !empty($this->scopeConfig->getValue('attlaz/general/project'));
     }
 
+    /**
+     * Get project environment identifier
+     *
+     * @return string
+     */
     public function getProjectEnvironmentIdentifier(): string
     {
         return $this->scopeConfig->getValue('attlaz/general/environment');
     }
 
+    /**
+     * Determine if project environment identifier is configured
+     *
+     * @return bool
+     */
     public function hasProjectEnvironmentIdentifier(): bool
     {
         return !empty($this->scopeConfig->getValue('attlaz/general/environment'));
     }
 
+    /**
+     * Determine if log stream is configured
+     *
+     * @return bool
+     */
     public function hasLogStream(): bool
     {
         try {
@@ -108,30 +180,46 @@ class Data
         }
     }
 
+    /**
+     * Get log stream id
+     *
+     * @return string
+     */
     public function getLogStreamId(): string
     {
         return $this->scopeConfig->getValue('attlaz/logging/logstream');
     }
 
+    /**
+     * Get minimum log level
+     *
+     * @return int
+     */
     public function getMinLogLevel(): int
     {
         $key = null;
         try {
             $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
         } catch (\Throwable $ex) {
+            return 200;
         }
 
         if (empty($key)) {
             return 200;
         }
-        return \intval($key);
-
+        return (int)$key;
     }
 
     /**
+     * Parse external identifier
+     *
      * TODO: refactor following to different external id helper
+     *
+     * @param string $externalId
+     * @param string $key
+     * @return string
+     * @throws \Exception
      */
-
     private static function parseExternalId(string $externalId, string $key = 'external_id'): string
     {
         $externalId = trim($externalId);
@@ -143,26 +231,23 @@ class Data
                     return $externalIdObject[$key];
                 }
             } else {
-                throw new \Exception('Unable to parse external id (' . $externalId . ', ' . json_last_error() . ')');
+                $msg = 'Unable to parse external id (' . $externalId . ', ' . json_last_error() . ')';
+                throw new \ErrorException($msg);
             }
         }
         if (strpos($externalId, ':') !== false) {
-            throw new \Exception('Unable to parse external id (' . $externalId . ')');
+            throw new \ErrorException('Unable to parse external id (' . $externalId . ')');
         }
 
         return $externalId;
     }
 
-    public static function getExternalId(DataObject $dataObject): string
-    {
-        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
-        if ($externalId !== null && $externalId !== false) {
-            return self::parseExternalId($externalId);
-        }
-
-        return '';
-    }
-
+    /**
+     * Determine if object has external identifier
+     *
+     * @param DataObject $dataObject
+     * @return bool
+     */
     public static function hasExternalId(DataObject $dataObject): bool
     {
         $hasExternalId = $dataObject->hasData(Data::EXTERNAL_ID_FIELD);
@@ -175,5 +260,21 @@ class Data
         }
 
         return true;
+    }
+
+    /**
+     * Get object external identifier
+     *
+     * @param DataObject $dataObject
+     * @return string
+     * @throws \Exception
+     */
+    public static function getExternalId(DataObject $dataObject): string
+    {
+        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
+        if ($externalId !== null && $externalId !== false) {
+            return self::parseExternalId($externalId);
+        }
+        return '';
     }
 }

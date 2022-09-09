@@ -9,9 +9,15 @@ use Magento\Framework\Message\ManagerInterface;
 
 class Project implements OptionSourceInterface
 {
+    /** @var Data */
     private Data $dataHelper;
+    /** @var ManagerInterface */
     private ManagerInterface $messageManager;
 
+    /**
+     * @param Data $dataHelper
+     * @param ManagerInterface $messageManager
+     */
     public function __construct(Data $dataHelper, ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
@@ -19,6 +25,8 @@ class Project implements OptionSourceInterface
     }
 
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
@@ -54,8 +62,13 @@ class Project implements OptionSourceInterface
         return $result;
     }
 
+    /**
+     * Determine if we can fetch data
+     *
+     * @return bool
+     */
     private function canFetchData(): bool
     {
-        return !\is_null($this->dataHelper->getClient());
+        return $this->dataHelper->getClient() !== null;
     }
 }

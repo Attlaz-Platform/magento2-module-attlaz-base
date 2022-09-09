@@ -7,17 +7,21 @@ use Attlaz\Base\Block\System\Config\Form\Branding;
 ?>
 <div class="attlaz-branding">
     <div class="logo-wrap">
-        <img width="120" src="<?= /* @escapeNotVerified */
-        $block->getLogo() ?>"/>
+        <img width="120" src="<?= $block->escapeHtmlAttr($block->getLogo()); ?>"/>
     </div>
 
     <div class="content">
         <p>
-            <span class="title"><?= __('Attlaz - Create the data network of your organization'); ?></span><br/>
-            Visit the <a href="<?= /* @escapeNotVerified */
-            $block->getWebsiteUrl() ?>" target="_blank">Attlaz website</a> <?= __('for support and more information,'); ?><br/>
-            <?= __('or go to the'); ?>
-            <a href="<?= /* @escapeNotVerified */
-            $block->getAppUrl() ?>" target="_blank">app</a> to manage your project</p>
+            <span class="title">
+                <?= $block->escapeHtml(__('Attlaz - Create the data network of your organization')); ?>
+            </span>
+            <br/>
+            Visit the <a href="<?= $block->escapeHtmlAttr($block->getWebsiteUrl()); ?>" target="_blank">
+                Attlaz website
+            </a> <?= $block->escapeHtml(__('for support and more information,')); ?><br/>
+            <?= $block->escapeHtml(__('or go to the')); ?>
+            <a href="<?= $block->escapeHtmlAttr($block->getAppUrl()); ?>" target="_blank">
+                app
+            </a> to manage your project</p>
     </div>
 </div>

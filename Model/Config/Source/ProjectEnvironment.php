@@ -9,9 +9,15 @@ use Magento\Framework\Message\ManagerInterface;
 
 class ProjectEnvironment implements OptionSourceInterface
 {
+    /** @var Data */
     private Data $dataHelper;
+    /** @var ManagerInterface */
     private ManagerInterface $messageManager;
 
+    /**
+     * @param Data $dataHelper
+     * @param ManagerInterface $messageManager
+     */
     public function __construct(Data $dataHelper, ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
@@ -19,13 +25,14 @@ class ProjectEnvironment implements OptionSourceInterface
     }
 
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
     {
         //TODO: should we cache this?
         $result = [];
-
 
         if ($this->canFetchData()) {
 
@@ -46,7 +53,8 @@ class ProjectEnvironment implements OptionSourceInterface
                 }
 
             } catch (\Throwable $exception) {
-                $this->messageManager->addErrorMessage('Unable to fetch project environments: ' . $exception->getMessage());
+                $msg = 'Unable to fetch project environments: ' . $exception->getMessage();
+                $this->messageManager->addErrorMessage($msg);
             }
 
         }
@@ -54,8 +62,16 @@ class ProjectEnvironment implements OptionSourceInterface
         return $result;
     }
 
+    /**
+     * Determine if we can fetch data
+     *
+     * @return bool
+     */
     private function canFetchData(): bool
     {
-        return !\is_null($this->dataHelper->getClient()) && $this->dataHelper->hasProjectIdentifier();
+        if (!$this->dataHelper->hasProjectIdentifier()) {
+            return false;
+        }
+        return $this->dataHelper->getClient() !== null;
     }
 }
