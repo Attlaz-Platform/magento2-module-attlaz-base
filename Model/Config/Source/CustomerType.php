@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
-
 use Magento\Framework\Data\OptionSourceInterface;
 
 class CustomerType implements OptionSourceInterface
 {
-    const TYPE_ALL = 0;
-    const TYPE_NONE = 1;
-    const TYPE_AUTHENTICATED = 2;
-    const TYPE_LINKED = 3;
+    public const TYPE_ALL = 0;
+    public const TYPE_NONE = 1;
+    public const TYPE_AUTHENTICATED = 2;
+    public const TYPE_LINKED = 3;
 
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()

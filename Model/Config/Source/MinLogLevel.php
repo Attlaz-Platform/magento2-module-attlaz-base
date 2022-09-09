@@ -8,16 +8,14 @@ use Monolog\Logger;
 
 class MinLogLevel implements OptionSourceInterface
 {
-
-
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
     {
-
         $result = [];
-
 
         $logLevels = Logger::getLevels();
         foreach ($logLevels as $level => $value) {
@@ -26,8 +24,7 @@ class MinLogLevel implements OptionSourceInterface
                 'label' => $level,
             ];
         }
-
-
+        
         return $result;
     }
 }

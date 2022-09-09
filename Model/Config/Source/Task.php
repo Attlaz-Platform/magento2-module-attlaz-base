@@ -9,9 +9,15 @@ use Magento\Framework\Message\ManagerInterface;
 
 class Task implements OptionSourceInterface
 {
+    /** @var Data */
     private Data $dataHelper;
+    /** @var ManagerInterface */
     private ManagerInterface $messageManager;
 
+    /**
+     * @param Data $dataHelper
+     * @param ManagerInterface $messageManager
+     */
     public function __construct(Data $dataHelper, ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
@@ -19,13 +25,13 @@ class Task implements OptionSourceInterface
     }
 
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
     {
         try {
-
-
             //TODO: should we cache this?
             $result = [];
             $result[] = [
@@ -38,8 +44,8 @@ class Task implements OptionSourceInterface
 
                 foreach ($tasks as $task) {
                     $label = $task->name . ' (' . $task->id . ')';
-                    if ($task->state !== 'active') {
-                    }
+//                    if ($task->state !== 'active') {
+//                    }
                     $result[] = [
                         'value' => $task->id,
                         'label' => $label,
@@ -53,8 +59,19 @@ class Task implements OptionSourceInterface
         return [];
     }
 
+    /**
+     * Determine if we can fetch data
+     *
+     * @return bool
+     */
     private function canFetchData(): bool
     {
-        return !\is_null($this->dataHelper->getClient()) && $this->dataHelper->hasProjectIdentifier() && $this->dataHelper->hasProjectEnvironmentIdentifier();
+        if (!$this->dataHelper->hasProjectIdentifier()) {
+            return false;
+        }
+        if (!$this->dataHelper->hasProjectEnvironmentIdentifier()) {
+            return false;
+        }
+        return $this->dataHelper->getClient() !== null;
     }
 }
