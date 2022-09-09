@@ -18,8 +18,7 @@ class Attlaz extends AbstractHandler
 
     public function __construct(Data $dataHelper)
     {
-        $minLogLevel = $dataHelper->getMinLogLevel();
-        parent::__construct($minLogLevel, true);
+        parent::__construct(Logger::INFO, true);
         $this->dataHelper = $dataHelper;
     }
 
@@ -50,6 +49,9 @@ class Attlaz extends AbstractHandler
     {
         $this->initialized = true;
         $client = null;
+
+        $minLogLevel = $this->dataHelper->getMinLogLevel();
+        $this->setLevel($minLogLevel);
 
         if ($this->dataHelper->hasLogStream()) {
 
