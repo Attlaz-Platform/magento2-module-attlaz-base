@@ -4,22 +4,29 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
-use Attlaz\Base\Model\Resource\BaseResource;
+use Magento\Framework\Data\OptionSourceInterface;
+use Magento\Framework\Message\ManagerInterface;
 
-class LogStream implements \Magento\Framework\Data\OptionSourceInterface
+class LogStream implements OptionSourceInterface
 {
-    private $dataHelper;
-    private $baseResource;
-    private $messageManager;
+    /** @var Data */
+    private Data $dataHelper;
+    /** @var ManagerInterface */
+    private ManagerInterface $messageManager;
 
-    public function __construct(Data $dataHelper, BaseResource $baseResource, \Magento\Framework\Message\ManagerInterface $messageManager)
+    /**
+     * @param Data $dataHelper
+     * @param ManagerInterface $messageManager
+     */
+    public function __construct(Data $dataHelper, ManagerInterface $messageManager)
     {
         $this->dataHelper = $dataHelper;
-        $this->baseResource = $baseResource;
         $this->messageManager = $messageManager;
     }
 
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
@@ -27,12 +34,11 @@ class LogStream implements \Magento\Framework\Data\OptionSourceInterface
         //TODO: should we cache this?
         $result = [];
 
-
         if ($this->canFetchData()) {
 
             try {
-                $logStreams = $this->dataHelper->getClient()->getLogEndpoint()->getLogStreams($this->dataHelper->getProjectIdentifier());
-
+                $logEndpoint = $this->dataHelper->getClient()->getLogEndpoint();
+                $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
 
                 if (count($logStreams) !== 0) {
                     $result[] = [
@@ -56,8 +62,16 @@ class LogStream implements \Magento\Framework\Data\OptionSourceInterface
         return $result;
     }
 
+    /**
+     * Determine if we can fetch data
+     *
+     * @return bool
+     */
     private function canFetchData(): bool
     {
-        return !\is_null($this->dataHelper->getClient()) && $this->dataHelper->hasProjectIdentifier();
+        if (!$this->dataHelper->hasProjectIdentifier()) {
+            return false;
+        }
+        return $this->dataHelper->getClient() !== null;
     }
 }

@@ -3,20 +3,19 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
+use Magento\Framework\Data\OptionSourceInterface;
 use Monolog\Logger;
 
-class MinLogLevel implements \Magento\Framework\Data\OptionSourceInterface
+class MinLogLevel implements OptionSourceInterface
 {
-
-
     /**
+     * Return array of options as value-label pairs
+     *
      * @return array
      */
     public function toOptionArray()
     {
-
         $result = [];
-
 
         $logLevels = Logger::getLevels();
         foreach ($logLevels as $level => $value) {
@@ -25,8 +24,7 @@ class MinLogLevel implements \Magento\Framework\Data\OptionSourceInterface
                 'label' => $level,
             ];
         }
-
-
+        
         return $result;
     }
 }

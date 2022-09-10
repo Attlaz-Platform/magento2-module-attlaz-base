@@ -5,14 +5,22 @@ namespace Attlaz\Base\Model;
 
 abstract class AbstractCollection implements \Iterator, \Countable
 {
+    /** @var array */
+    protected array $collection;
 
-    protected $collection;
-
+    /**
+     */
     public function __construct()
     {
         $this->collection = [];
     }
 
+    /**
+     * Get by id
+     *
+     * @param string $id
+     * @return mixed|null
+     */
     public function getById($id)
     {
         $id = $this->formatId($id);
@@ -23,42 +31,83 @@ abstract class AbstractCollection implements \Iterator, \Countable
         return null;
     }
 
+    /**
+     * Format id
+     *
+     * @param string $id
+     * @return string
+     */
     protected function formatId($id): string
     {
         return strtolower((string)$id);
     }
 
-    public function getIds()
+    /**
+     * Get ids
+     *
+     * @return array
+     */
+    public function getIds(): array
     {
         return array_keys($this->collection);
     }
 
-    public function current()
+    /**
+     * Return the current element
+     *
+     * @return mixed
+     */
+    public function current(): mixed
     {
         return current($this->collection);
     }
 
-    public function next()
+    /**
+     * Move forward to next element
+     *
+     * @return void
+     */
+    public function next(): void
     {
-        return next($this->collection);
+        next($this->collection);
     }
 
-    public function key()
+    /**
+     * Return the key of the current element
+     *
+     * @return mixed
+     */
+    public function key(): mixed
     {
         return key($this->collection);
     }
 
-    public function valid()
+    /**
+     * Checks if current position is valid
+     *
+     * @return bool
+     */
+    public function valid(): bool
     {
         return !!current($this->collection);
     }
 
-    public function rewind()
+    /**
+     * Rewind the Iterator to the first element
+     *
+     * @return void
+     */
+    public function rewind(): void
     {
         reset($this->collection);
     }
 
-    public function count()
+    /**
+     * Count elements of an object
+     *
+     * @return int
+     */
+    public function count(): int
     {
         return count($this->collection);
     }
