@@ -1,6 +1,6 @@
 {
   "name": "attlaz/magento2-module-attlaz-base",
-  "version": "2.4.0",
+  "version": "2.4.1",
   "description": "Attlaz Magento2 Base Module",
   "type": "magento2-module",
   "license": "MIT",
@@ -15,7 +15,7 @@
     "php": ">=7.4 | >=8.0 | >=8.1",
     "attlaz/client": "^1.7.6",
     "attlaz/attlaz-monolog": "0.0.*|^1.1.3",
-    "magento/framework": ">=103.0.4",
+    "magento/framework": ">=102.0.7-p3 || >=103.0.4",
     "magento/module-store": ">=101"
   },
   "autoload": {
