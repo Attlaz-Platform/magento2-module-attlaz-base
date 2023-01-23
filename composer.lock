@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "37902f7c8775c33c7877ba17975d7961",
+    "content-hash": "c9a9b37286df781e38b303b9c16892de",
     "packages": [
         {
             "name": "attlaz/attlaz-monolog",
@@ -61,16 +61,16 @@
         },
         {
             "name": "attlaz/client",
-            "version": "dev-1.9-dev",
+            "version": "1.9.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Attlaz-Platform/PHP-Client.git",
-                "reference": "1086cf7cb15e6f6dce4ab617050ca8a1a19dfbd9"
+                "reference": "908bb9865fa9897ba56b26b51da254306410eabc"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Attlaz-Platform/PHP-Client/zipball/1086cf7cb15e6f6dce4ab617050ca8a1a19dfbd9",
-                "reference": "1086cf7cb15e6f6dce4ab617050ca8a1a19dfbd9",
+                "url": "https://api.github.com/repos/Attlaz-Platform/PHP-Client/zipball/908bb9865fa9897ba56b26b51da254306410eabc",
+                "reference": "908bb9865fa9897ba56b26b51da254306410eabc",
                 "shasum": ""
             },
             "require": {
@@ -103,9 +103,9 @@
             ],
             "support": {
                 "issues": "https://github.com/Attlaz-Platform/PHP-Client/issues",
-                "source": "https://github.com/Attlaz-Platform/PHP-Client/tree/1.9-dev"
+                "source": "https://github.com/Attlaz-Platform/PHP-Client/tree/1.9.0"
             },
-            "time": "2023-01-23T10:15:50+00:00"
+            "time": "2023-01-23T11:17:47+00:00"
         },
         {
             "name": "brick/math",
@@ -6839,18 +6839,9 @@
         }
     ],
     "packages-dev": [],
-    "aliases": [
-        {
-            "package": "attlaz/client",
-            "version": "dev-1.9-dev",
-            "alias": "1.8.5",
-            "alias_normalized": "1.8.5.0"
-        }
-    ],
+    "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "attlaz/client": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
