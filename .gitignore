@@ -3,3 +3,4 @@
 vendor
 auth.json
 docker-compose.yml
+INTERNAL.md
