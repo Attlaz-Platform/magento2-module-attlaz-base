@@ -4,7 +4,7 @@
     <type name="Magento\Framework\Logger\Monolog">
         <arguments>
             <argument name="handlers" xsi:type="array">
-                <item name="attlaz" xsi:type="object">Attlaz\Base\Logger\Handler\Attlaz</item>
+                <item name="attlaz" xsi:type="object">Attlaz\Base\Logger\Handler\AttlazMagentoLogHandler</item>
                 <item name="system" xsi:type="object">Magento\Framework\Logger\Handler\System</item>
             </argument>
         </arguments>

@@ -99,31 +99,31 @@ class Data
      * @param string $task
      * @return string
      */
-    public function getTaskIdentifier(string $task): string
+    public function getFlowIdentifier(string $task): string
     {
-        return $this->scopeConfig->getValue($this->formatTaskIdentifierConfigPath($task));
+        return $this->scopeConfig->getValue($this->formatFlowIdentifierConfigPath($task));
     }
 
     /**
-     * Determine if task identifier is configured
+     * Determine if flow identifier is configured
      *
-     * @param string $task
+     * @param string $flow
      * @return bool
      */
-    public function hasTaskIdentifier(string $task): bool
+    public function hasFlowIdentifier(string $flow): bool
     {
-        return !empty($this->scopeConfig->getValue($this->formatTaskIdentifierConfigPath($task)));
+        return !empty($this->scopeConfig->getValue($this->formatFlowIdentifierConfigPath($flow)));
     }
 
     /**
-     * Format task identifier configuration path
+     * Format flow identifier configuration path
      *
-     * @param string $task
+     * @param string $flow
      * @return string
      */
-    private function formatTaskIdentifierConfigPath(string $task): string
+    private function formatFlowIdentifierConfigPath(string $flow): string
     {
-        return 'attlaz/tasks/' . $task . '_key';
+        return 'attlaz/tasks/' . $flow . '_key';
     }
 
     /**
@@ -208,6 +208,15 @@ class Data
             return 200;
         }
         return (int)$key;
+    }
+
+    public function getLogFilterRules(): array
+    {
+        // TODO: read this from configuration
+        return [
+            '/^Could not acquire lock for cron job:/',
+            "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/"
+        ];
     }
 
     /**
