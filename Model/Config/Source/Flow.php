@@ -7,7 +7,7 @@ use Attlaz\Base\Helper\Data;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
-class Task implements OptionSourceInterface
+class Flow implements OptionSourceInterface
 {
     /** @var Data */
     private Data $dataHelper;
@@ -39,22 +39,21 @@ class Task implements OptionSourceInterface
                 'label' => __('--Please Select--'),
             ];
             if ($this->canFetchData()) {
-                $tasks = $this->dataHelper->getClient()
-                    ->getTasks($this->dataHelper->getProjectIdentifier());
+                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier());
 
-                foreach ($tasks as $task) {
-                    $label = $task->name . ' (' . $task->id . ')';
+                foreach ($flows as $flow) {
+                    $label = $flow->name . ' (' . $flow->id . ')';
 //                    if ($task->state !== 'active') {
 //                    }
                     $result[] = [
-                        'value' => $task->id,
+                        'value' => $flow->id,
                         'label' => $label,
                     ];
                 }
             }
             return $result;
         } catch (\Throwable $ex) {
-            $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $ex->getMessage());
+            $this->messageManager->addErrorMessage('Unable to fetch flows: ' . $ex->getMessage());
         }
         return [];
     }
