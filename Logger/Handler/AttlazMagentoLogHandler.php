@@ -9,7 +9,7 @@ use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
-class Attlaz extends AbstractHandler
+class AttlazMagentoLogHandler extends AbstractHandler
 {
     /** @var Data */
     private Data $dataHelper;
@@ -49,11 +49,45 @@ class Attlaz extends AbstractHandler
             $this->initialize();
         }
 
+        if (!$this->isRecordFiltered($record)) {
+            return false;
+        }
+
         if ($this->handler !== null) {
             return $this->handler->handle($record);
         }
         return true;
     }
+
+
+    public function isRecordFiltered(array $record): bool
+    {
+        foreach ($this->dataHelper->getLogFilterRules() as $filterRule) {
+            if (!is_array($filterRule) || count($filterRule) === 1) {
+                $filterRule = ['message', is_array($filterRule) ? $filterRule[0] : $filterRule];
+            }
+
+            [$key, $pattern] = $filterRule;
+
+            if (is_array($key)) {
+                $value = array_reduce(
+                    $key,
+                    function ($arr, $key) {
+                        return $arr[$key] ?? null;
+                    },
+                    $record
+                );
+            } else {
+                $value = $record[$key] ?? null;
+            }
+
+            if (preg_match($pattern, (string)$value)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
 
     /**
      * Initialize handler
@@ -90,6 +124,7 @@ class Attlaz extends AbstractHandler
 
         }
     }
+
 
     /**
      * Determine if handler is active
