@@ -37,8 +37,7 @@ class ProjectEnvironment implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $projectEnvironments = $this->dataHelper->getClient()
-                    ->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
+                $projectEnvironments = $this->dataHelper->getClient()->getProjectEnvironmentEndpoint()->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
                 if (count($projectEnvironments) !== 0) {
                     $result[] = [
                         'value' => '',
