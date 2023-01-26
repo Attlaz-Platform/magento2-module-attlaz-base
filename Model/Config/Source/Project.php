@@ -37,8 +37,7 @@ class Project implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $projects = $this->dataHelper->getClient()
-                    ->getProjects();
+                $projects = $this->dataHelper->getClient()->getProjectEndpoint()->getProjects();
 
                 if (count($projects) !== 0) {
                     $result[] = [
