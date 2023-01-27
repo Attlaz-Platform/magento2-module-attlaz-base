@@ -5,7 +5,7 @@ namespace Attlaz\Base\Model\ResourceModel;
 
 use Attlaz\Base\Helper\Data;
 use Attlaz\Client;
-use Attlaz\Model\RunFlowResult;
+use Attlaz\Model\FlowRunRequestResponse;
 use Psr\Log\LoggerInterface;
 
 class BaseResource
@@ -40,10 +40,10 @@ class BaseResource
      *
      * @param string $flowId
      * @param array $arguments
-     * @return RunFlowResult
+     * @return FlowRunRequestResponse
      * @throws \Exception
      */
-    public function requestFlowRun(string $flowId, array $arguments = []): RunFlowResult
+    public function requestFlowRun(string $flowId, array $arguments = []): FlowRunRequestResponse
     {
         $client = $this->dataHelper->getClient();
         if ($client === null) {
