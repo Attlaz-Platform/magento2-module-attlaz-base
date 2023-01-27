@@ -49,7 +49,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
             $this->initialize();
         }
 
-        if (!$this->isRecordFiltered($record)) {
+        if ($this->isRecordFiltered($record)) {
             return false;
         }
 
