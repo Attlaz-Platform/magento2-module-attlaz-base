@@ -51,6 +51,12 @@
                     <source_model>Attlaz\Base\Model\Config\Source\MinLogLevel</source_model>
                     <comment><![CDATA[Set the minimum log level to store, only log entries with a level higher will be logged]]></comment>
                 </field>
+                <field id="ignore_rules" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Filter rules</label>
+                    <comment>
+                        <![CDATA[Log messages matching these expressions won't be logged. Separate by new line.]]>
+                    </comment>
+                </field>
             </group>
             <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Branding</label>

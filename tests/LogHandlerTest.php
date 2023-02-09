@@ -28,7 +28,7 @@ class LogHandlerTest extends TestCase
     public function testFilterbyMessage(): void
     {
         $dataHelperStub = $this->createStub(Data::class);
-        $dataHelperStub->method('getLogFilterRules')
+        $dataHelperStub->method('getLogFilterIgnoreRules')
             ->willReturn([
                 ['/^test$/'],
                 '/^another test$/',
@@ -49,7 +49,7 @@ class LogHandlerTest extends TestCase
     public function testFilterByProperty(): void
     {
         $dataHelperStub = $this->createStub(Data::class);
-        $dataHelperStub->method('getLogFilterRules')
+        $dataHelperStub->method('getLogFilterIgnoreRules')
             ->willReturn([
                 ['channel', '/^test$/'],
                 ['level_name', '/^(INFO|DEBUG)$/'],
