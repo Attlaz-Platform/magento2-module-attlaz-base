@@ -49,7 +49,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
             $this->initialize();
         }
 
-        if (!$this->isRecordFiltered($record)) {
+        if ($this->isRecordFiltered($record)) {
             return false;
         }
 
@@ -62,7 +62,8 @@ class AttlazMagentoLogHandler extends AbstractHandler
 
     public function isRecordFiltered(array $record): bool
     {
-        foreach ($this->dataHelper->getLogFilterRules() as $filterRule) {
+        $logIgnoreRules = $this->dataHelper->getLogFilterIgnoreRules();
+        foreach ($logIgnoreRules as $filterRule) {
             if (!is_array($filterRule) || count($filterRule) === 1) {
                 $filterRule = ['message', is_array($filterRule) ? $filterRule[0] : $filterRule];
             }
