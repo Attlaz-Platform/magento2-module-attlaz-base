@@ -9,6 +9,7 @@
             </api>
             <logging>
                 <minloglevel>200</minloglevel>
+                <ignore_rules>/^Could not acquire lock for cron job:/</ignore_rules>
             </logging>
         </attlaz>
     </default>

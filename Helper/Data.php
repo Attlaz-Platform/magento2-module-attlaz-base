@@ -210,12 +210,27 @@ class Data
         return (int)$key;
     }
 
-    public function getLogFilterRules(): array
+    public function getLogFilterIgnoreRules(): array
     {
-        // TODO: read this from configuration
+
+        try {
+            $ignoreRules = $this->scopeConfig->getValue('attlaz/logging/ignore_rules');
+        } catch (\Throwable $ex) {
+            return [];
+        }
+
+        if (empty($ignoreRules)) {
+            return [];
+        }
+        $ignoreRules = explode(PHP_EOL, $ignoreRules);
+        $ignoreRules = array_filter($ignoreRules);
+        return $ignoreRules;
         return [
             '/^Could not acquire lock for cron job:/',
-            "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/"
+            "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/",
+            "/^Failed cm checkEmailInList: Subscriber not in list or has already been removed.$/",
+
+
         ];
     }
 
