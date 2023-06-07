@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Helper;
@@ -7,6 +8,7 @@ use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
+
 use function Safe\json_decode;
 
 class Data

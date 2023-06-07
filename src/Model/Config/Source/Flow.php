@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
@@ -43,8 +44,8 @@ class Flow implements OptionSourceInterface
 
                 foreach ($flows as $flow) {
                     $label = $flow->name . ' (' . $flow->id . ')';
-//                    if ($task->state !== 'active') {
-//                    }
+                    //                    if ($task->state !== 'active') {
+                    //                    }
                     $result[] = [
                         'value' => $flow->id,
                         'label' => $label,

@@ -4,3 +4,4 @@ vendor
 auth.json
 docker-compose.yml
 INTERNAL.md
+.php-cs-fixer.cache
