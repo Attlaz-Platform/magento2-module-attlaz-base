@@ -48,7 +48,7 @@ class Project implements ArrayInterface
                     ];
                 }
             } catch (\Throwable $ex) {
-                $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $exception->getMessage());
+                $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $ex->getMessage());
             }
 
         }
