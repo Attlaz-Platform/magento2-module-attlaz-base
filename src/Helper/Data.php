@@ -7,6 +7,7 @@ use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
+use function Safe\json_decode;
 
 class Data
 {
@@ -223,15 +224,7 @@ class Data
             return [];
         }
         $ignoreRules = explode(PHP_EOL, $ignoreRules);
-        $ignoreRules = array_filter($ignoreRules);
-        return $ignoreRules;
-        return [
-            '/^Could not acquire lock for cron job:/',
-            "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/",
-            "/^Failed cm checkEmailInList: Subscriber not in list or has already been removed.$/",
-
-
-        ];
+        return array_filter($ignoreRules);
     }
 
     /**
@@ -248,7 +241,7 @@ class Data
     {
         $externalId = trim($externalId);
         if (substr($externalId, 0, 1) === '{') {
-            $externalIdObject = json_decode($externalId, true);
+            $externalIdObject = json_decode($externalId, true, 512, JSON_THROW_ON_ERROR);
 
             if (json_last_error() === JSON_ERROR_NONE) {
                 if (isset($externalIdObject[$key])) {

@@ -8,13 +8,14 @@ use Attlaz\Base\Helper\Data;
 use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
+use function Safe\preg_match;
 
 class AttlazMagentoLogHandler extends AbstractHandler
 {
     /** @var Data */
     private Data $dataHelper;
     /** @var AttlazHandler|null */
-    private ?AttlazHandler $handler = null;
+    private AttlazHandler|null $handler = null;
     /** @var bool */
     private bool $initialized = false;
 
