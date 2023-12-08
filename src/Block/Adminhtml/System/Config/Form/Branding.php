@@ -1,8 +1,7 @@
 <?php
-
 declare(strict_types=1);
 
-namespace Attlaz\Base\Block\System\Config\Form;
+namespace Attlaz\Base\Block\Adminhtml\System\Config\Form;
 
 use Magento\Config\Block\System\Config\Form\Field;
 use Magento\Framework\Data\Form\Element\AbstractElement;

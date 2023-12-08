@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Attlaz\Base\Helper;
@@ -8,7 +7,6 @@ use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
-
 use function Safe\json_decode;
 
 class Data
@@ -51,7 +49,7 @@ class Data
      *
      * @return Client|null
      */
-    public function getClient(): ?Client
+    public function getClient(): Client|null
     {
         if ($this->client === null && $this->hasClientConfiguration()) {
 
@@ -59,7 +57,8 @@ class Data
             $clientId = $this->getApiClientId();
             $clientSecret = $this->getApiClientSecret();
 
-            $this->client = new Client($clientId, $clientSecret);
+            $this->client = new Client();
+            $this->client->authWithClient($clientId, $clientSecret);
             $this->client->setEndPoint($endpoint);
         }
 
