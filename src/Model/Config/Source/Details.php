@@ -50,7 +50,8 @@ class Details implements OptionSourceInterface
         if ($this->_helper->hasClientConfiguration()) {
 
             try {
-
+                $this->_options['api_endpoint'] = $this->_helper->getApiEndpoint();
+                $this->_options['api_version'] = $this->_helper->getClient()->getApiVersion();
                 if ($this->_helper->hasProjectEnvironmentIdentifier()) {
                     $this->_options['environment'] = $this->_helper->getProjectIdentifier();
                 }
@@ -71,7 +72,8 @@ class Details implements OptionSourceInterface
         $res = [];
         if (is_array($this->_options)) {
             foreach ($this->_options as $option => $value) {
-                $res[] = ['label' => ucfirst($option), 'value' => $value];
+                $formattedLabel = ucwords(str_replace(['-', '_'], [' ', ' '], $option));
+                $res[] = ['label' => $formattedLabel, 'value' => $value];
             }
         } elseif (!$this->_options) {
             $res = [['label' => 'Error', 'value' => __('--- Invalid API Key ---')]];
