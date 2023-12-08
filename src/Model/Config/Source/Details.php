@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
-
 use Magento\Framework\Data\OptionSourceInterface;
 
 class Details implements OptionSourceInterface
@@ -48,7 +47,7 @@ class Details implements OptionSourceInterface
             $scope = 'default';
         }
         if ($this->_helper->hasClientConfiguration()) {
-
+            $this->_options['module_version'] = $this->_helper->getModuleVersion();
             try {
                 $this->_options['api_endpoint'] = $this->_helper->getApiEndpoint();
                 $this->_options['api_version'] = $this->_helper->getClient()->getApiVersion();

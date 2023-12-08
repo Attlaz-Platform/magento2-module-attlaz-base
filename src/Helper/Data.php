@@ -25,7 +25,7 @@ class Data
     /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig, private \Magento\Framework\Module\ModuleList\Loader $moduleLoader)
     {
         $this->scopeConfig = $scopeConfig;
     }
@@ -294,5 +294,14 @@ class Data
             return self::parseExternalId($externalId);
         }
         return '';
+    }
+
+    public function getModuleVersion(): string
+    {
+        $modules = $this->moduleLoader->load();
+        if (isset($modules['Attlaz_Base'])) {
+            return $modules['Attlaz_Base']['setup_version'];
+        }
+        return '[Unknown]';
     }
 }
