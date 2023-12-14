@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
@@ -7,7 +8,7 @@ use Attlaz\Base\Helper\Data;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
-class ProjectEnvironment implements OptionSourceInterface
+class LogStream implements OptionSourceInterface
 {
     /** @var Data */
     private Data $dataHelper;
@@ -37,23 +38,24 @@ class ProjectEnvironment implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $projectEnvironments = $this->dataHelper->getClient()->getProjectEnvironmentEndpoint()->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
-                if (count($projectEnvironments) !== 0) {
+                $logEndpoint = $this->dataHelper->getClient()->getLogEndpoint();
+                $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
+
+                if (count($logStreams) !== 0) {
                     $result[] = [
                         'value' => '',
                         'label' => __('--Please Select--'),
                     ];
                 }
-                foreach ($projectEnvironments as $projectEnvironment) {
+                foreach ($logStreams as $logStream) {
                     $result[] = [
-                        'value' => $projectEnvironment->id,
-                        'label' => $projectEnvironment->name . ' [' . $projectEnvironment->id . ']',
+                        'value' => $logStream->getId(),
+                        'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
                     ];
                 }
 
             } catch (\Throwable $exception) {
-                $msg = 'Unable to fetch project environments: ' . $exception->getMessage();
-                $this->messageManager->addErrorMessage($msg);
+                $this->messageManager->addErrorMessage('Unable to fetch log log streams: ' . $exception->getMessage());
             }
 
         }

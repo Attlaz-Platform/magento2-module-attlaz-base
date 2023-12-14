@@ -24,6 +24,15 @@
                     <config_path>attlaz/api/client_secret</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
+                <field id="account_details" translate="label" type="textarea" sortOrder="40" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
+                    <label>Account Details</label>
+                    <frontend_model>Attlaz\Base\Block\Adminhtml\System\Config\Account</frontend_model>
+                    <source_model>Attlaz\Base\Model\Config\Source\Details</source_model>
+                    <!--                    <depends>-->
+                    <!--                        <field id="*/*/active">1</field>-->
+                    <!--                    </depends>-->
+                </field>
             </group>
             <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>General</label>
@@ -60,7 +69,7 @@
             </group>
             <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Branding</label>
-                <frontend_model>Attlaz\Base\Block\System\Config\Form\Branding</frontend_model>
+                <frontend_model>Attlaz\Base\Block\Adminhtml\System\Config\Form\Branding</frontend_model>
             </group>
         </section>
     </system>

@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\ResourceModel;
@@ -10,7 +11,6 @@ use Psr\Log\LoggerInterface;
 
 class BaseResource
 {
-
     protected LoggerInterface $logger;
 
     protected Data $dataHelper;

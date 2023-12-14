@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
@@ -7,7 +8,7 @@ use Attlaz\Base\Helper\Data;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
-class Flow implements OptionSourceInterface
+class ProjectEnvironment implements OptionSourceInterface
 {
     /** @var Data */
     private Data $dataHelper;
@@ -31,31 +32,34 @@ class Flow implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        try {
-            //TODO: should we cache this?
-            $result = [];
-            $result[] = [
-                'value' => '',
-                'label' => __('--Please Select--'),
-            ];
-            if ($this->canFetchData()) {
-                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier());
+        //TODO: should we cache this?
+        $result = [];
 
-                foreach ($flows as $flow) {
-                    $label = $flow->name . ' (' . $flow->id . ')';
-//                    if ($task->state !== 'active') {
-//                    }
+        if ($this->canFetchData()) {
+
+            try {
+                $projectEnvironments = $this->dataHelper->getClient()->getProjectEnvironmentEndpoint()->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
+                if (count($projectEnvironments) !== 0) {
                     $result[] = [
-                        'value' => $flow->id,
-                        'label' => $label,
+                        'value' => '',
+                        'label' => __('--Please Select--'),
                     ];
                 }
+                foreach ($projectEnvironments as $projectEnvironment) {
+                    $result[] = [
+                        'value' => $projectEnvironment->id,
+                        'label' => $projectEnvironment->name . ' [' . $projectEnvironment->id . ']',
+                    ];
+                }
+
+            } catch (\Throwable $exception) {
+                $msg = 'Unable to fetch project environments: ' . $exception->getMessage();
+                $this->messageManager->addErrorMessage($msg);
             }
-            return $result;
-        } catch (\Throwable $ex) {
-            $this->messageManager->addErrorMessage('Unable to fetch flows: ' . $ex->getMessage());
+
         }
-        return [];
+
+        return $result;
     }
 
     /**
@@ -66,9 +70,6 @@ class Flow implements OptionSourceInterface
     private function canFetchData(): bool
     {
         if (!$this->dataHelper->hasProjectIdentifier()) {
-            return false;
-        }
-        if (!$this->dataHelper->hasProjectEnvironmentIdentifier()) {
             return false;
         }
         return $this->dataHelper->getClient() !== null;

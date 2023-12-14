@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
@@ -24,7 +25,7 @@ class MinLogLevel implements OptionSourceInterface
                 'label' => $level,
             ];
         }
-        
+
         return $result;
     }
 }
