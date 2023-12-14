@@ -7,6 +7,7 @@ use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\ScopeInterface;
+use function Safe\json_decode;
 
 class Data
 {
@@ -14,6 +15,10 @@ class Data
     public const EXTERNAL_ID_FIELD = 'attlaz_external_id';
     /** @var string */
     public const SYNC_TIME_FIELD = 'attlaz_sync_time';
+    /** @var string */
+    public const SYNC_STATUS_FIELD = 'attlaz_sync_status';
+    /** @var string */
+    public const SYNC_ID_FIELD = 'attlaz_sync_id';
     /** @var string */
     public const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
     /** @var ScopeConfigInterface */
@@ -24,7 +29,7 @@ class Data
     /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig)
+    public function __construct(ScopeConfigInterface $scopeConfig, private \Magento\Framework\Module\ModuleList\Loader $moduleLoader)
     {
         $this->scopeConfig = $scopeConfig;
     }
@@ -48,7 +53,7 @@ class Data
      *
      * @return Client|null
      */
-    public function getClient(): ?Client
+    public function getClient(): Client|null
     {
         if ($this->client === null && $this->hasClientConfiguration()) {
 
@@ -56,7 +61,8 @@ class Data
             $clientId = $this->getApiClientId();
             $clientSecret = $this->getApiClientSecret();
 
-            $this->client = new Client($clientId, $clientSecret);
+            $this->client = new Client();
+            $this->client->authWithClient($clientId, $clientSecret);
             $this->client->setEndPoint($endpoint);
         }
 
@@ -223,15 +229,7 @@ class Data
             return [];
         }
         $ignoreRules = explode(PHP_EOL, $ignoreRules);
-        $ignoreRules = array_filter($ignoreRules);
-        return $ignoreRules;
-        return [
-            '/^Could not acquire lock for cron job:/',
-            "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/",
-            "/^Failed cm checkEmailInList: Subscriber not in list or has already been removed.$/",
-
-
-        ];
+        return array_filter($ignoreRules);
     }
 
     /**
@@ -248,7 +246,7 @@ class Data
     {
         $externalId = trim($externalId);
         if (substr($externalId, 0, 1) === '{') {
-            $externalIdObject = json_decode($externalId, true);
+            $externalIdObject = json_decode($externalId, true, 512, JSON_THROW_ON_ERROR);
 
             if (json_last_error() === JSON_ERROR_NONE) {
                 if (isset($externalIdObject[$key])) {
@@ -300,5 +298,14 @@ class Data
             return self::parseExternalId($externalId);
         }
         return '';
+    }
+
+    public function getModuleVersion(): string
+    {
+        $modules = $this->moduleLoader->load();
+        if (isset($modules['Attlaz_Base'])) {
+            return $modules['Attlaz_Base']['setup_version'];
+        }
+        return '[Unknown]';
     }
 }

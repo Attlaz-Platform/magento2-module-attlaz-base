@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
@@ -7,7 +8,7 @@ use Attlaz\Base\Helper\Data;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
-class LogStream implements OptionSourceInterface
+class Flow implements OptionSourceInterface
 {
     /** @var Data */
     private Data $dataHelper;
@@ -31,35 +32,31 @@ class LogStream implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        //TODO: should we cache this?
-        $result = [];
+        try {
+            //TODO: should we cache this?
+            $result = [];
+            $result[] = [
+                'value' => '',
+                'label' => __('--Please Select--'),
+            ];
+            if ($this->canFetchData()) {
+                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier());
 
-        if ($this->canFetchData()) {
-
-            try {
-                $logEndpoint = $this->dataHelper->getClient()->getLogEndpoint();
-                $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
-
-                if (count($logStreams) !== 0) {
+                foreach ($flows as $flow) {
+                    $label = $flow->name . ' (' . $flow->id . ')';
+                    //                    if ($task->state !== 'active') {
+                    //                    }
                     $result[] = [
-                        'value' => '',
-                        'label' => __('--Please Select--'),
+                        'value' => $flow->id,
+                        'label' => $label,
                     ];
                 }
-                foreach ($logStreams as $logStream) {
-                    $result[] = [
-                        'value' => $logStream->getId(),
-                        'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
-                    ];
-                }
-
-            } catch (\Throwable $exception) {
-                $this->messageManager->addErrorMessage('Unable to fetch log log streams: ' . $exception->getMessage());
             }
-
+            return $result;
+        } catch (\Throwable $ex) {
+            $this->messageManager->addErrorMessage('Unable to fetch flows: ' . $ex->getMessage());
         }
-
-        return $result;
+        return [];
     }
 
     /**
@@ -70,6 +67,9 @@ class LogStream implements OptionSourceInterface
     private function canFetchData(): bool
     {
         if (!$this->dataHelper->hasProjectIdentifier()) {
+            return false;
+        }
+        if (!$this->dataHelper->hasProjectEnvironmentIdentifier()) {
             return false;
         }
         return $this->dataHelper->getClient() !== null;

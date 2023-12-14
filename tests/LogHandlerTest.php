@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 use Attlaz\Base\Helper\Data;
@@ -11,13 +12,13 @@ class LogHandlerTest extends TestCase
     private function createLogRecord(int $level = Logger::WARNING, string $message = 'test', string $channel = 'test', array $context = []): array
     {
         return [
-            'message'    => $message,
-            'context'    => $context,
-            'level'      => $level,
+            'message' => $message,
+            'context' => $context,
+            'level' => $level,
             'level_name' => Logger::getLevelName($level),
-            'channel'    => $channel,
-            'datetime'   => new DateTimeImmutable('now'),
-            'extra'      => [
+            'channel' => $channel,
+            'datetime' => new DateTimeImmutable('now'),
+            'extra' => [
                 'nested' => [
                     'data' => 'Nested log data',
                 ],
@@ -33,11 +34,10 @@ class LogHandlerTest extends TestCase
                 ['/^test$/'],
                 '/^another test$/',
                 '/^Could not acquire lock for cron job:/',
-                "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/"
+                "/^Failed cm checkEmailInList: We couldn't find the resource you're looking for. Please check the documentation and try again$/",
             ]);
 
         $handler = new AttlazMagentoLogHandler($dataHelperStub);
-
 
         $this->assertTrue($handler->isRecordFiltered($this->createLogRecord(Logger::WARNING, 'test')));
         $this->assertTrue($handler->isRecordFiltered($this->createLogRecord(Logger::INFO, 'another test')));
@@ -57,11 +57,9 @@ class LogHandlerTest extends TestCase
 
         $handler = new AttlazMagentoLogHandler($dataHelperStub);
 
-
         $this->assertTrue($handler->isRecordFiltered($this->createLogRecord()));
         $this->assertTrue($handler->isRecordFiltered($this->createLogRecord(Logger::DEBUG, 'test', 'testing')));
         $this->assertTrue($handler->isRecordFiltered($this->createLogRecord(Logger::INFO, 'test', 'testing')));
         $this->assertFalse($handler->isRecordFiltered($this->createLogRecord(Logger::WARNING, 'test', 'testing')));
     }
-
 }

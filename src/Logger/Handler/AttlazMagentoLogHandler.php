@@ -1,4 +1,5 @@
 <?php
+
 declare(strict_types=1);
 
 namespace Attlaz\Base\Logger\Handler;
@@ -9,12 +10,14 @@ use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Logger;
 
+use function Safe\preg_match;
+
 class AttlazMagentoLogHandler extends AbstractHandler
 {
     /** @var Data */
     private Data $dataHelper;
     /** @var AttlazHandler|null */
-    private ?AttlazHandler $handler = null;
+    private AttlazHandler|null $handler = null;
     /** @var bool */
     private bool $initialized = false;
 
@@ -117,9 +120,9 @@ class AttlazMagentoLogHandler extends AbstractHandler
                 $handler = new AttlazHandler($client, $logStreamId, $level, $bubble);
 
                 $this->handler = $handler;
-//            } catch (\Throwable $ex) {
-//
-//            }
+                //            } catch (\Throwable $ex) {
+                //
+                //            }
 
             }
 

@@ -12,20 +12,24 @@
   ],
   "require": {
     "php": ">=8.1",
-    "attlaz/client": "^1.9.4",
+    "attlaz/client": "^1.11",
     "attlaz/attlaz-monolog": "0.0.*|^1.1.3",
     "magento/framework": ">=103.0.4",
-    "magento/module-store": ">=101"
+    "magento/module-store": ">=101",
+    "thecodingmachine/safe": "^v2.5.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "~9.5.0"
+    "phpunit/phpunit": "~9.5.0",
+    "phpstan/phpstan": "^1.10.16",
+    "thecodingmachine/phpstan-safe-rule": "^v1.2.0",
+    "friendsofphp/php-cs-fixer": "^v3.17.0"
   },
   "autoload": {
     "files": [
       "registration.php"
     ],
     "psr-4": {
-      "Attlaz\\Base\\": ""
+      "Attlaz\\Base\\": "src"
     }
   },
   "repositories": [
@@ -38,5 +42,10 @@
     "allow-plugins": {
       "magento/composer-dependency-version-audit-plugin": true
     }
+  },
+  "scripts": {
+    "lint:fix": " ./vendor/bin/php-cs-fixer fix --config=.php-cs-fixer.php",
+    "phpstan": " ./vendor/bin/phpstan analyse --memory-limit=512M",
+    "phpstan:generate-baseline": " ./vendor/bin/phpstan analyse --generate-baseline --memory-limit=512M"
   }
 }
