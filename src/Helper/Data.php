@@ -16,6 +16,10 @@ class Data
     /** @var string */
     public const SYNC_TIME_FIELD = 'attlaz_sync_time';
     /** @var string */
+    public const SYNC_STATUS_FIELD = 'attlaz_sync_status';
+    /** @var string */
+    public const SYNC_ID_FIELD = 'attlaz_sync_id';
+    /** @var string */
     public const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
     /** @var ScopeConfigInterface */
     protected ScopeConfigInterface $scopeConfig;
