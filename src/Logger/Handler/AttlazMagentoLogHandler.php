@@ -1,5 +1,4 @@
 <?php
-
 declare(strict_types=1);
 
 namespace Attlaz\Base\Logger\Handler;
@@ -8,8 +7,8 @@ use Attlaz\AttlazMonolog\Handler\AttlazHandler;
 use Attlaz\Base\Helper\Data;
 use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
-use Monolog\Logger;
-
+use Monolog\Level;
+use Monolog\LogRecord;
 use function Safe\preg_match;
 
 class AttlazMagentoLogHandler extends AbstractHandler
@@ -26,21 +25,21 @@ class AttlazMagentoLogHandler extends AbstractHandler
      */
     public function __construct(Data $dataHelper)
     {
-        parent::__construct(Logger::INFO, true);
+        parent::__construct(Level::Info, true);
         $this->dataHelper = $dataHelper;
     }
 
     /**
      * @inheritDoc
      */
-    public function handle(array $record): bool
+    public function handle(LogRecord $record): bool
     {
         if (!$this->initialized) {
             $minLogLevel = $this->dataHelper->getMinLogLevel();
             $this->setLevel($minLogLevel);
         }
 
-        if ($record['level'] < $this->level) {
+        if ($record->level < $this->level) {
             return false;
         }
 
@@ -63,7 +62,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
     }
 
 
-    public function isRecordFiltered(array $record): bool
+    public function isRecordFiltered(LogRecord $record): bool
     {
         $logIgnoreRules = $this->dataHelper->getLogFilterIgnoreRules();
         foreach ($logIgnoreRules as $filterRule) {
@@ -76,7 +75,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
             if (is_array($key)) {
                 $value = array_reduce(
                     $key,
-                    function ($arr, $key) {
+                    static function ($arr, $key) {
                         return $arr[$key] ?? null;
                     },
                     $record
@@ -112,7 +111,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
             }
             $dataHelper = $this->dataHelper;
             if ($client !== null) {
-                $level = Logger::DEBUG;
+                $level = Level::Debug;
                 $bubble = true;
 
                 //try {

@@ -6,6 +6,7 @@
                 <endpoint>https://api.attlaz.com</endpoint>
                 <client_id backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
                 <client_secret backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
+                <token backend_model="Magento\Config\Model\Config\Backend\Encrypted"/>
             </api>
             <logging>
                 <minloglevel>200</minloglevel>

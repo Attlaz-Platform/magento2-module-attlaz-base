@@ -71,7 +71,7 @@ class Details implements OptionSourceInterface
         $res = [];
         if (is_array($this->_options)) {
             foreach ($this->_options as $option => $value) {
-                $formattedLabel = ucwords(str_replace(['-', '_'], [' ', ' '], $option));
+                $formattedLabel = ucwords(str_replace(['-', '_'], [' ', ' '], (string)$option));
                 $res[] = ['label' => $formattedLabel, 'value' => $value];
             }
         } elseif (!$this->_options) {
