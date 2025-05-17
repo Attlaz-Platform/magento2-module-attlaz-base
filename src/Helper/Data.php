@@ -6,7 +6,6 @@ namespace Attlaz\Base\Helper;
 use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use Magento\Store\Model\ScopeInterface;
 use function Safe\json_decode;
 
 class Data
@@ -35,17 +34,87 @@ class Data
     }
 
     /**
+     * Determine if object has external identifier
+     *
+     * @param DataObject $dataObject
+     * @return bool
+     */
+    public static function hasExternalId(DataObject $dataObject): bool
+    {
+        $hasExternalId = $dataObject->hasData(Data::EXTERNAL_ID_FIELD);
+        if (!$hasExternalId) {
+            return false;
+        }
+        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
+        if ($externalId === null || $externalId === false || trim($externalId) === '') {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Get object external identifier
+     *
+     * @param DataObject $dataObject
+     * @return string
+     * @throws \Exception
+     */
+    public static function getExternalId(DataObject $dataObject): string
+    {
+        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
+        if ($externalId !== null && $externalId !== false) {
+            return self::parseExternalId($externalId);
+        }
+        return '';
+    }
+
+    /**
+     * Parse external identifier
+     *
+     * TODO: refactor following to different external id helper
+     *
+     * @param string $externalId
+     * @param string $key
+     * @return string
+     * @throws \Exception
+     */
+    private static function parseExternalId(string $externalId, string $key = 'external_id'): string
+    {
+        $externalId = trim($externalId);
+        if (substr($externalId, 0, 1) === '{') {
+            $externalIdObject = json_decode($externalId, true, 512, JSON_THROW_ON_ERROR);
+
+            if (json_last_error() === JSON_ERROR_NONE) {
+                if (isset($externalIdObject[$key])) {
+                    return $externalIdObject[$key];
+                }
+            } else {
+                $msg = 'Unable to parse external id (' . $externalId . ', ' . json_last_error() . ')';
+                throw new \ErrorException($msg);
+            }
+        }
+        if (strpos($externalId, ':') !== false) {
+            throw new \ErrorException('Unable to parse external id (' . $externalId . ')');
+        }
+
+        return $externalId;
+    }
+
+    /**
      * Determine if client is configured
      *
      * @return bool
      */
     public function hasClientConfiguration(): bool
     {
-        $endpoint = $this->scopeConfig->getValue('attlaz/api/endpoint', ScopeInterface::SCOPE_STORE, null);
-        $clientId = $this->scopeConfig->getValue('attlaz/api/client_id', ScopeInterface::SCOPE_STORE, null);
-        $clientSecret = $this->scopeConfig->getValue('attlaz/api/client_secret');
-
-        return (!empty($endpoint) && !empty($clientId) && !empty($clientSecret));
+        if (empty($this->getApiEndpoint())) {
+            return false;
+        }
+        if (!empty($this->getApiToken())) {
+            return true;
+        }
+        return !empty($this->getApiClientId()) && !empty($this->getApiClientSecret());
     }
 
     /**
@@ -57,13 +126,18 @@ class Data
     {
         if ($this->client === null && $this->hasClientConfiguration()) {
 
-            $endpoint = $this->getApiEndpoint();
-            $clientId = $this->getApiClientId();
-            $clientSecret = $this->getApiClientSecret();
-
             $this->client = new Client();
-            $this->client->authWithClient($clientId, $clientSecret);
-            $this->client->setEndPoint($endpoint);
+            $this->client->setEndPoint($this->getApiEndpoint());
+
+            $token = $this->getApiToken();
+            if (!empty($token)) {
+                $this->client->authWithToken($token);
+            } else {
+                $clientId = $this->getApiClientId();
+                $clientSecret = $this->getApiClientSecret();
+
+                $this->client->authWithClient($clientId, $clientSecret);
+            }
         }
 
         return $this->client;
@@ -72,19 +146,20 @@ class Data
     /**
      * Get API endpoint
      *
-     * @return string
+     * @return string|null
      */
-    public function getApiEndpoint(): string
+    public function getApiEndpoint(): string|null
     {
+        //$this->scopeConfig->getValue('attlaz/api/endpoint', ScopeInterface::SCOPE_STORE, null)
         return $this->scopeConfig->getValue('attlaz/api/endpoint');
     }
 
     /**
      * Get API client id
      *
-     * @return string
+     * @return string|null
      */
-    public function getApiClientId(): string
+    public function getApiClientId(): string|null
     {
         return $this->scopeConfig->getValue('attlaz/api/client_id');
     }
@@ -92,11 +167,21 @@ class Data
     /**
      * Get API client secret
      *
-     * @return string
+     * @return string|null
      */
-    public function getApiClientSecret(): string
+    public function getApiClientSecret(): string|null
     {
         return $this->scopeConfig->getValue('attlaz/api/client_secret');
+    }
+
+    /**
+     * Get API token
+     *
+     * @return string|null
+     */
+    public function getApiToken(): string|null
+    {
+        return $this->scopeConfig->getValue('attlaz/api/token');
     }
 
     /**
@@ -119,17 +204,6 @@ class Data
     public function hasFlowIdentifier(string $flow): bool
     {
         return !empty($this->scopeConfig->getValue($this->formatFlowIdentifierConfigPath($flow)));
-    }
-
-    /**
-     * Format flow identifier configuration path
-     *
-     * @param string $flow
-     * @return string
-     */
-    private function formatFlowIdentifierConfigPath(string $flow): string
-    {
-        return 'attlaz/tasks/' . $flow . '_key';
     }
 
     /**
@@ -232,74 +306,6 @@ class Data
         return array_filter($ignoreRules);
     }
 
-    /**
-     * Parse external identifier
-     *
-     * TODO: refactor following to different external id helper
-     *
-     * @param string $externalId
-     * @param string $key
-     * @return string
-     * @throws \Exception
-     */
-    private static function parseExternalId(string $externalId, string $key = 'external_id'): string
-    {
-        $externalId = trim($externalId);
-        if (substr($externalId, 0, 1) === '{') {
-            $externalIdObject = json_decode($externalId, true, 512, JSON_THROW_ON_ERROR);
-
-            if (json_last_error() === JSON_ERROR_NONE) {
-                if (isset($externalIdObject[$key])) {
-                    return $externalIdObject[$key];
-                }
-            } else {
-                $msg = 'Unable to parse external id (' . $externalId . ', ' . json_last_error() . ')';
-                throw new \ErrorException($msg);
-            }
-        }
-        if (strpos($externalId, ':') !== false) {
-            throw new \ErrorException('Unable to parse external id (' . $externalId . ')');
-        }
-
-        return $externalId;
-    }
-
-    /**
-     * Determine if object has external identifier
-     *
-     * @param DataObject $dataObject
-     * @return bool
-     */
-    public static function hasExternalId(DataObject $dataObject): bool
-    {
-        $hasExternalId = $dataObject->hasData(Data::EXTERNAL_ID_FIELD);
-        if (!$hasExternalId) {
-            return false;
-        }
-        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
-        if ($externalId === null || $externalId === false || trim($externalId) === '') {
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Get object external identifier
-     *
-     * @param DataObject $dataObject
-     * @return string
-     * @throws \Exception
-     */
-    public static function getExternalId(DataObject $dataObject): string
-    {
-        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
-        if ($externalId !== null && $externalId !== false) {
-            return self::parseExternalId($externalId);
-        }
-        return '';
-    }
-
     public function getModuleVersion(): string
     {
         $modules = $this->moduleLoader->load();
@@ -307,5 +313,16 @@ class Data
             return $modules['Attlaz_Base']['setup_version'];
         }
         return '[Unknown]';
+    }
+
+    /**
+     * Format flow identifier configuration path
+     *
+     * @param string $flow
+     * @return string
+     */
+    private function formatFlowIdentifierConfigPath(string $flow): string
+    {
+        return 'attlaz/tasks/' . $flow . '_key';
     }
 }

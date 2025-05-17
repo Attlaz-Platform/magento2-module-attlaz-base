@@ -1,30 +1,45 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="attlaz" translate="label" sortOrder="200" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Attlaz</label>
             <tab>service</tab>
             <resource>Attlaz_Base::config_attlaz</resource>
-            <group id="api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="api" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
                 <label>API</label>
-                <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="endpoint" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Endpoint</label>
                     <comment><![CDATA[Don’t change unless asked to do so.]]></comment>
                     <config_path>attlaz/api/endpoint</config_path>
                 </field>
-                <field id="client_id" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="token" translate="label" type="obscure" sortOrder="20" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
+                    <label>Token</label>
+                    <comment>
+                        <![CDATA[You can manage your api tokens <a href="https://app.attlaz.com/settings/user/apikeys" target="_blank">in the Attlaz app</a>.]]></comment>
+                    <config_path>attlaz/api/token</config_path>
+                    <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
+                </field>
+                <field id="client_id" translate="label" type="obscure" sortOrder="30" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Client Id</label>
-                    <comment><![CDATA[Your client id can be found on the <a href="https://app.attlaz.com/general/config" target="_blank">settings page</a> in the Attlaz app]]></comment>
+                    <comment>
+                        <![CDATA[Authentication with client details is deprecated, use token instead.]]></comment>
                     <config_path>attlaz/api/client_id</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="client_secret" translate="label" type="obscure" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="client_secret" translate="label" type="obscure" sortOrder="40" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Client Secret</label>
-                    <comment><![CDATA[Your client secret can be found on the <a href="https://app.attlaz.com/general/config" target="_blank">settings page</a> in the Attlaz app]]></comment>
+                    <comment>
+                        <![CDATA[Authentication with client details is deprecated, use token instead.]]></comment>
                     <config_path>attlaz/api/client_secret</config_path>
                     <backend_model>Magento\Config\Model\Config\Backend\Encrypted</backend_model>
                 </field>
-                <field id="account_details" translate="label" type="textarea" sortOrder="40" showInDefault="1"
+                <field id="account_details" translate="label" type="textarea" sortOrder="50" showInDefault="1"
                        showInWebsite="1" showInStore="1">
                     <label>Account Details</label>
                     <frontend_model>Attlaz\Base\Block\Adminhtml\System\Config\Account</frontend_model>
@@ -34,40 +49,51 @@
                     <!--                    </depends>-->
                 </field>
             </group>
-            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="general" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
                 <label>General</label>
-                <field id="project" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="project" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Project</label>
                     <source_model>Attlaz\Base\Model\Config\Source\Project</source_model>
                 </field>
-                <field id="environment" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="environment" translate="label" type="select" sortOrder="10" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Environment</label>
                     <source_model>Attlaz\Base\Model\Config\Source\ProjectEnvironment</source_model>
                 </field>
             </group>
-            <group id="tasks" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="tasks" translate="label" type="text" sortOrder="30" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
                 <label>Flows</label>
             </group>
-            <group id="logging" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="logging" translate="label" type="text" sortOrder="40" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
                 <label>Logging</label>
-                <field id="logstream" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="logstream" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1"
+                       showInStore="1">
                     <label>Log stream</label>
                     <source_model>Attlaz\Base\Model\Config\Source\LogStream</source_model>
-                    <comment><![CDATA[Leave empty to disable. You can manage the log streams in <a href="https://app.attlaz.com/general/config" target="_blank">Attlaz app</a>]]></comment>
+                    <comment>
+                        <![CDATA[Leave empty to disable. You can manage the log streams in <a href="https://app.attlaz.com/general/config" target="_blank">Attlaz app</a>]]></comment>
                 </field>
-                <field id="minloglevel" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="minloglevel" translate="label" type="select" sortOrder="20" showInDefault="1"
+                       showInWebsite="1" showInStore="1">
                     <label>Minimum log level</label>
                     <source_model>Attlaz\Base\Model\Config\Source\MinLogLevel</source_model>
-                    <comment><![CDATA[Set the minimum log level to store, only log entries with a level higher will be logged]]></comment>
+                    <comment>
+                        <![CDATA[Set the minimum log level to store, only log entries with a level higher will be logged]]></comment>
                 </field>
-                <field id="ignore_rules" translate="label comment" type="textarea" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="ignore_rules" translate="label comment" type="textarea" sortOrder="30" showInDefault="1"
+                       showInWebsite="0" showInStore="0">
                     <label>Filter rules</label>
                     <comment>
                         <![CDATA[Log messages matching these expressions won't be logged. Separate by new line.]]>
                     </comment>
                 </field>
             </group>
-            <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
+            <group id="branding" translate="label" type="text" sortOrder="50" showInDefault="1" showInWebsite="1"
+                   showInStore="1">
                 <label>Branding</label>
                 <frontend_model>Attlaz\Base\Block\Adminhtml\System\Config\Form\Branding</frontend_model>
             </group>

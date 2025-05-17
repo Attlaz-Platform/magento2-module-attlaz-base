@@ -17,6 +17,9 @@
             <argument name="sensitive" xsi:type="array">
                 <item name="attlaz/api/client_secret" xsi:type="string">1</item>
             </argument>
+            <argument name="sensitive" xsi:type="array">
+                <item name="attlaz/api/token" xsi:type="string">1</item>
+            </argument>
         </arguments>
     </type>
 </config>
