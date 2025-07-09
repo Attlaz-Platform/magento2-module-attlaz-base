@@ -3,39 +3,25 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Model\Config\Source;
 
+use Attlaz\Base\Helper\Data;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 
 class Details implements OptionSourceInterface
 {
     private array|null $_options = null;
-    /**
-     * @var \Attlaz\Base\Helper\Data
-     */
-    private $_helper = null;
-    /**
-     * @var \Magento\Framework\Message\ManagerInterface
-     */
-    private $_message;
-    private $storeManager;
-    private string $_error = '';
 
     /**
      * Details constructor.
-     * @param \Ebizmarts\MailChimp\Helper\Data $helper
-     * @param \Magento\Framework\Message\ManagerInterface $message
-     * @param \Magento\Store\Model\StoreManager $storeManager
-     * @param \Magento\Framework\App\RequestInterface $request
+     * @param Data $_helper
+     * @param RequestInterface $request
      */
     public function __construct(
-        \Attlaz\Base\Helper\Data                    $helper,
-        \Magento\Framework\Message\ManagerInterface $message,
-        \Magento\Store\Model\StoreManager           $storeManager,
-        \Magento\Framework\App\RequestInterface     $request
+        private readonly Data $_helper,
+        RequestInterface      $request
     )
     {
-        $this->_message = $message;
-        $this->_helper = $helper;
-        $this->storeManager = $storeManager;
+
         $storeId = (int)$request->getParam("store", 0);
         if ($request->getParam('website', 0)) {
             $scope = 'website';
@@ -46,19 +32,26 @@ class Details implements OptionSourceInterface
         } else {
             $scope = 'default';
         }
+        $this->_options['module_version'] = $this->_helper->getModuleVersion();
         if ($this->_helper->hasClientConfiguration()) {
-            $this->_options['module_version'] = $this->_helper->getModuleVersion();
+
             try {
                 $this->_options['api_endpoint'] = $this->_helper->getApiEndpoint();
-                $this->_options['api_version'] = $this->_helper->getClient()->getApiVersion();
+
+                $client = $this->_helper->getClient();
+                if ($client !== null) {
+                    $this->_options['api_version'] = $client->getApiVersion();
+                }
+
+
                 if ($this->_helper->hasProjectEnvironmentIdentifier()) {
                     $this->_options['environment'] = $this->_helper->getProjectIdentifier();
                 }
-                $this->_options['connected'] = true;
+                $this->_options['connected'] = 'Yes';
             } catch (\Exception $e) {
                 //$this->_helper->log($e->getFriendlyMessage());
-                $this->_error = $e->getMessage();
-                $this->_options['connected'] = false;
+                // $this->_error = $e->getMessage();
+                $this->_options['connected'] = 'No';
             }
         } else {
             $this->_options = ['--- Enter your API Key ---'];

@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Attlaz\Base\Block\Adminhtml\System\Config;
 
-class Account extends \Magento\Config\Block\System\Config\Form\Field
+use Magento\Config\Block\System\Config\Form\Field;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+
+class Account extends Field
 {
-    protected function _getElementHtml(\Magento\Framework\Data\Form\Element\AbstractElement $element)
+    protected function _getElementHtml(AbstractElement $element)
     {
         $values = $element->getValues();
         $html = '<div id="attlaz_general_account_details">';

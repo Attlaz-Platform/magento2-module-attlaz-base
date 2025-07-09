@@ -38,21 +38,25 @@ class Project implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $projects = $this->dataHelper->getClient()->getProjectEndpoint()->getProjects();
+                $client = $this->dataHelper->getClient();
+                if ($client !== null) {
+                    $projects = $client->getProjectEndpoint()->getProjects();
 
-                if (count($projects) !== 0) {
-                    $result[] = [
-                        'value' => '',
-                        'label' => __('--Please Select--'),
-                    ];
+                    if (count($projects) !== 0) {
+                        $result[] = [
+                            'value' => '',
+                            'label' => __('--Please Select--'),
+                        ];
+                    }
+
+                    foreach ($projects as $project) {
+                        $result[] = [
+                            'value' => $project->id,
+                            'label' => $project->name . ' [' . $project->id . ']',
+                        ];
+                    }
                 }
 
-                foreach ($projects as $project) {
-                    $result[] = [
-                        'value' => $project->id,
-                        'label' => $project->name . ' [' . $project->id . ']',
-                    ];
-                }
             } catch (\Throwable $ex) {
                 $this->messageManager->addErrorMessage('Unable to fetch projects: ' . $ex->getMessage());
             }

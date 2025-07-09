@@ -41,16 +41,12 @@ class Data
      */
     public static function hasExternalId(DataObject $dataObject): bool
     {
-        $hasExternalId = $dataObject->hasData(Data::EXTERNAL_ID_FIELD);
+        $hasExternalId = $dataObject->hasData(self::EXTERNAL_ID_FIELD);
         if (!$hasExternalId) {
             return false;
         }
-        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
-        if ($externalId === null || $externalId === false || trim($externalId) === '') {
-            return false;
-        }
-
-        return true;
+        $externalId = $dataObject->getData(self::EXTERNAL_ID_FIELD);
+        return !($externalId === null || $externalId === false || trim($externalId) === '');
     }
 
     /**
@@ -62,7 +58,7 @@ class Data
      */
     public static function getExternalId(DataObject $dataObject): string
     {
-        $externalId = $dataObject->getData(Data::EXTERNAL_ID_FIELD);
+        $externalId = $dataObject->getData(self::EXTERNAL_ID_FIELD);
         if ($externalId !== null && $externalId !== false) {
             return self::parseExternalId($externalId);
         }
@@ -151,27 +147,8 @@ class Data
     public function getApiEndpoint(): string|null
     {
         //$this->scopeConfig->getValue('attlaz/api/endpoint', ScopeInterface::SCOPE_STORE, null)
-        return $this->scopeConfig->getValue('attlaz/api/endpoint');
-    }
-
-    /**
-     * Get API client id
-     *
-     * @return string|null
-     */
-    public function getApiClientId(): string|null
-    {
-        return $this->scopeConfig->getValue('attlaz/api/client_id');
-    }
-
-    /**
-     * Get API client secret
-     *
-     * @return string|null
-     */
-    public function getApiClientSecret(): string|null
-    {
-        return $this->scopeConfig->getValue('attlaz/api/client_secret');
+        $value = $this->scopeConfig->getValue('attlaz/api/endpoint');
+        return $value === null ? null : (string)$value;
     }
 
     /**
@@ -181,8 +158,33 @@ class Data
      */
     public function getApiToken(): string|null
     {
-        return $this->scopeConfig->getValue('attlaz/api/token');
+        $value = $this->scopeConfig->getValue('attlaz/api/token');
+        return $value === null ? null : (string)$value;
     }
+
+    /**
+     * Get API client id
+     * @return string|null
+     * @deprecated
+     */
+    public function getApiClientId(): string|null
+    {
+        $value = $this->scopeConfig->getValue('attlaz/api/client_id');
+        return $value === null ? null : (string)$value;
+    }
+
+    /**
+     * Get API client secret
+     *
+     * @return string|null
+     * @deprecated
+     */
+    public function getApiClientSecret(): string|null
+    {
+        $value = $this->scopeConfig->getValue('attlaz/api/client_secret');
+        return $value === null ? null : (string)$value;
+    }
+
 
     /**
      * Get task identifier
@@ -192,7 +194,8 @@ class Data
      */
     public function getFlowIdentifier(string $task): string
     {
-        return $this->scopeConfig->getValue($this->formatFlowIdentifierConfigPath($task));
+        $value = $this->scopeConfig->getValue($this->formatFlowIdentifierConfigPath($task));
+        return $value === null ? '' : (string)$value;
     }
 
     /**
@@ -213,7 +216,8 @@ class Data
      */
     public function getProjectIdentifier(): string
     {
-        return $this->scopeConfig->getValue('attlaz/general/project');
+        $value = $this->scopeConfig->getValue('attlaz/general/project');
+        return $value === null ? '' : (string)$value;
     }
 
     /**
@@ -233,7 +237,8 @@ class Data
      */
     public function getProjectEnvironmentIdentifier(): string
     {
-        return $this->scopeConfig->getValue('attlaz/general/environment');
+        $value = $this->scopeConfig->getValue('attlaz/general/environment');
+        return $value === null ? '' : (string)$value;
     }
 
     /**
@@ -267,7 +272,8 @@ class Data
      */
     public function getLogStreamId(): string
     {
-        return $this->scopeConfig->getValue('attlaz/logging/logstream');
+        $value = $this->scopeConfig->getValue('attlaz/logging/logstream');
+        return $value === null ? '' : (string)$value;
     }
 
     /**

@@ -38,22 +38,24 @@ class LogStream implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $logEndpoint = $this->dataHelper->getClient()->getLogEndpoint();
-                $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
+                $client = $this->dataHelper->getClient();
+                if ($client !== null) {
+                    $logEndpoint = $client->getLogEndpoint();
+                    $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
 
-                if (count($logStreams) !== 0) {
-                    $result[] = [
-                        'value' => '',
-                        'label' => __('--Please Select--'),
-                    ];
+                    if (count($logStreams) !== 0) {
+                        $result[] = [
+                            'value' => '',
+                            'label' => __('--Please Select--'),
+                        ];
+                    }
+                    foreach ($logStreams as $logStream) {
+                        $result[] = [
+                            'value' => $logStream->getId(),
+                            'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
+                        ];
+                    }
                 }
-                foreach ($logStreams as $logStream) {
-                    $result[] = [
-                        'value' => $logStream->getId(),
-                        'label' => $logStream->getName() . ' [' . $logStream->getId() . ']',
-                    ];
-                }
-
             } catch (\Throwable $exception) {
                 $this->messageManager->addErrorMessage('Unable to fetch log log streams: ' . $exception->getMessage());
             }

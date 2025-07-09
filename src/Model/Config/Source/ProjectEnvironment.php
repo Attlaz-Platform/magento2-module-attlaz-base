@@ -38,19 +38,23 @@ class ProjectEnvironment implements OptionSourceInterface
         if ($this->canFetchData()) {
 
             try {
-                $projectEnvironments = $this->dataHelper->getClient()->getProjectEnvironmentEndpoint()->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
-                if (count($projectEnvironments) !== 0) {
-                    $result[] = [
-                        'value' => '',
-                        'label' => __('--Please Select--'),
-                    ];
+                $client = $this->dataHelper->getClient();
+                if ($client !== null) {
+                    $projectEnvironments = $client->getProjectEnvironmentEndpoint()->getProjectEnvironments($this->dataHelper->getProjectIdentifier());
+                    if (count($projectEnvironments) !== 0) {
+                        $result[] = [
+                            'value' => '',
+                            'label' => __('--Please Select--'),
+                        ];
+                    }
+                    foreach ($projectEnvironments as $projectEnvironment) {
+                        $result[] = [
+                            'value' => $projectEnvironment->id,
+                            'label' => $projectEnvironment->name . ' [' . $projectEnvironment->id . ']',
+                        ];
+                    }
                 }
-                foreach ($projectEnvironments as $projectEnvironment) {
-                    $result[] = [
-                        'value' => $projectEnvironment->id,
-                        'label' => $projectEnvironment->name . ' [' . $projectEnvironment->id . ']',
-                    ];
-                }
+
 
             } catch (\Throwable $exception) {
                 $msg = 'Unable to fetch project environments: ' . $exception->getMessage();
