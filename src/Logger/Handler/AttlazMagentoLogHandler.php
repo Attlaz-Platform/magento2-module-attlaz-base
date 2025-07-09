@@ -9,12 +9,10 @@ use Attlaz\Model\Log\LogStreamId;
 use Monolog\Handler\AbstractHandler;
 use Monolog\Level;
 use Monolog\LogRecord;
-use function Safe\preg_match;
 
 class AttlazMagentoLogHandler extends AbstractHandler
 {
-    /** @var Data */
-    private Data $dataHelper;
+
     /** @var AttlazHandler|null */
     private AttlazHandler|null $handler = null;
     /** @var bool */
@@ -23,10 +21,11 @@ class AttlazMagentoLogHandler extends AbstractHandler
     /**
      * @param Data $dataHelper
      */
-    public function __construct(Data $dataHelper)
+    public function __construct(
+        private readonly Data $dataHelper
+    )
     {
         parent::__construct(Level::Info, true);
-        $this->dataHelper = $dataHelper;
     }
 
     /**

@@ -6,7 +6,7 @@ namespace Attlaz\Base\Helper;
 use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
-use function Safe\json_decode;
+use Magento\Framework\Module\ModuleList\Loader;
 
 class Data
 {
@@ -20,17 +20,17 @@ class Data
     public const SYNC_ID_FIELD = 'attlaz_sync_id';
     /** @var string */
     public const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
-    /** @var ScopeConfigInterface */
-    protected ScopeConfigInterface $scopeConfig;
     /** @var Client|null */
     private ?Client $client = null;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, private \Magento\Framework\Module\ModuleList\Loader $moduleLoader)
+    public function __construct(
+        private readonly ScopeConfigInterface $scopeConfig,
+        private readonly Loader               $moduleLoader
+    )
     {
-        $this->scopeConfig = $scopeConfig;
     }
 
     /**
