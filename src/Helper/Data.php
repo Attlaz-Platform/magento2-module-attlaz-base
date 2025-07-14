@@ -22,6 +22,7 @@ class Data
     public const BLOCK_DATA_FLAG_CONTAINS_REAL_TIME_DATA = '_realtime';
     /** @var Client|null */
     private ?Client $client = null;
+    private bool|null $hasClientConfiguration = null;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -104,13 +105,10 @@ class Data
      */
     public function hasClientConfiguration(): bool
     {
-        if (empty($this->getApiEndpoint())) {
-            return false;
+        if ($this->hasClientConfiguration === null) {
+            $this->hasClientConfiguration = !empty($this->getApiEndpoint()) && (!empty($this->getApiToken()) || (!empty($this->getApiClientId()) && !empty($this->getApiClientSecret())));
         }
-        if (!empty($this->getApiToken())) {
-            return true;
-        }
-        return !empty($this->getApiClientId()) && !empty($this->getApiClientSecret());
+        return $this->hasClientConfiguration;
     }
 
     /**
