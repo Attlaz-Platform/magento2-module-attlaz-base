@@ -17,6 +17,7 @@ class AttlazMagentoLogHandler extends AbstractHandler
     private AttlazHandler|null $handler = null;
     /** @var bool */
     private bool $initialized = false;
+    private bool|null $isActive = null;
 
     /**
      * @param Data $dataHelper
@@ -60,7 +61,6 @@ class AttlazMagentoLogHandler extends AbstractHandler
         return true;
     }
 
-
     public function isRecordFiltered(LogRecord $record): bool
     {
         $logIgnoreRules = $this->dataHelper->getLogFilterIgnoreRules();
@@ -89,7 +89,6 @@ class AttlazMagentoLogHandler extends AbstractHandler
         }
         return false;
     }
-
 
     /**
      * Initialize handler
@@ -127,7 +126,6 @@ class AttlazMagentoLogHandler extends AbstractHandler
         }
     }
 
-
     /**
      * Determine if handler is active
      *
@@ -135,15 +133,10 @@ class AttlazMagentoLogHandler extends AbstractHandler
      */
     private function isActive(): bool
     {
-        if (!$this->dataHelper->hasProjectIdentifier()) {
-            return false;
+        if (is_null($this->isActive)) {
+            $this->isActive = $this->dataHelper->hasProjectIdentifier() && $this->dataHelper->hasProjectEnvironmentIdentifier() && $this->dataHelper->hasLogStream();
         }
-        if (!$this->dataHelper->hasProjectEnvironmentIdentifier()) {
-            return false;
-        }
-        if (!$this->dataHelper->hasLogStream()) {
-            return false;
-        }
-        return true;
+
+        return $this->isActive;
     }
 }
