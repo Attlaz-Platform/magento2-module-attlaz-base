@@ -7,6 +7,7 @@ use Attlaz\Client;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Module\ModuleList\Loader;
+use Monolog\Level;
 
 class Data
 {
@@ -119,7 +120,6 @@ class Data
     public function getClient(): Client|null
     {
         if ($this->client === null && $this->hasClientConfiguration()) {
-
             $this->client = new Client();
             $this->client->setEndPoint($this->getApiEndpoint());
 
@@ -277,21 +277,27 @@ class Data
     /**
      * Get minimum log level
      *
-     * @return int
+     * @return Level
      */
-    public function getMinLogLevel(): int
+    public function getMinLogLevel(): Level
     {
         $key = null;
         try {
             $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
+            if (empty($key)) {
+                return Level::Warning;
+            }
+            if (is_numeric($key)) {
+                return Level::tryFrom((int)$key);
+            }
+
+            return Level::tryFrom($key);
         } catch (\Throwable $ex) {
-            return 200;
+
         }
 
-        if (empty($key)) {
-            return 200;
-        }
-        return (int)$key;
+
+        return Level::Warning;
     }
 
     public function getLogFilterIgnoreRules(): array

@@ -17,14 +17,14 @@ class MinLogLevel implements OptionSourceInterface
     public function toOptionArray()
     {
         return [
-            ['value' => Level::Debug->value . '', 'label' => 'Debug'],
-            ['value' => Level::Info->value . '', 'label' => 'Info'],
-            ['value' => Level::Notice->value . '', 'label' => 'Notice'],
-            ['value' => Level::Warning->value . '', 'label' => 'Warning'],
-            ['value' => Level::Error->value . '', 'label' => 'Error'],
-            ['value' => Level::Critical->value . '', 'label' => 'Critical'],
-            ['value' => Level::Alert->value . '', 'label' => 'Alert'],
-            ['value' => Level::Emergency->value . '', 'label' => 'Emergency'],
+            ['value' => Level::Debug->name, 'label' => 'Debug'],
+            ['value' => Level::Info->name, 'label' => 'Info'],
+            ['value' => Level::Notice->name, 'label' => 'Notice'],
+            ['value' => Level::Warning->name, 'label' => 'Warning'],
+            ['value' => Level::Error->name, 'label' => 'Error'],
+            ['value' => Level::Critical->name, 'label' => 'Critical'],
+            ['value' => Level::Alert->name, 'label' => 'Alert'],
+            ['value' => Level::Emergency->name, 'label' => 'Emergency'],
         ];
     }
 }
