@@ -11,18 +11,17 @@ use Psr\Log\LoggerInterface;
 
 class BaseResource
 {
-    protected LoggerInterface $logger;
 
-    protected Data $dataHelper;
 
     /**
      * @param Data $dataHelper
      * @param LoggerInterface $logger
      */
-    public function __construct(Data $dataHelper, LoggerInterface $logger)
+    public function __construct(
+        protected readonly Data            $dataHelper,
+        protected readonly LoggerInterface $logger
+    )
     {
-        $this->dataHelper = $dataHelper;
-        $this->logger = $logger;
     }
 
     /**

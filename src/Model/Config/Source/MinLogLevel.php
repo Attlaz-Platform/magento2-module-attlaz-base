@@ -5,7 +5,7 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Magento\Framework\Data\OptionSourceInterface;
-use Monolog\Logger;
+use Monolog\Level;
 
 class MinLogLevel implements OptionSourceInterface
 {
@@ -16,16 +16,15 @@ class MinLogLevel implements OptionSourceInterface
      */
     public function toOptionArray()
     {
-        $result = [];
-
-        $logLevels = Logger::getLevels();
-        foreach ($logLevels as $level => $value) {
-            $result[] = [
-                'value' => $value,
-                'label' => $level,
-            ];
-        }
-
-        return $result;
+        return [
+            ['value' => Level::Debug->value . '', 'label' => 'Debug'],
+            ['value' => Level::Info->value . '', 'label' => 'Info'],
+            ['value' => Level::Notice->value . '', 'label' => 'Notice'],
+            ['value' => Level::Warning->value . '', 'label' => 'Warning'],
+            ['value' => Level::Error->value . '', 'label' => 'Error'],
+            ['value' => Level::Critical->value . '', 'label' => 'Critical'],
+            ['value' => Level::Alert->value . '', 'label' => 'Alert'],
+            ['value' => Level::Emergency->value . '', 'label' => 'Emergency'],
+        ];
     }
 }
