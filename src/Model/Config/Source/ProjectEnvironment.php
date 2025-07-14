@@ -10,19 +10,16 @@ use Magento\Framework\Message\ManagerInterface;
 
 class ProjectEnvironment implements OptionSourceInterface
 {
-    /** @var Data */
-    private Data $dataHelper;
-    /** @var ManagerInterface */
-    private ManagerInterface $messageManager;
+
 
     /**
      * @param Data $dataHelper
      * @param ManagerInterface $messageManager
      */
-    public function __construct(Data $dataHelper, ManagerInterface $messageManager)
+    public function __construct(
+        private readonly Data             $dataHelper,
+        private readonly ManagerInterface $messageManager)
     {
-        $this->dataHelper = $dataHelper;
-        $this->messageManager = $messageManager;
     }
 
     /**
