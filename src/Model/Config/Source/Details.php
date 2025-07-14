@@ -22,16 +22,16 @@ class Details implements OptionSourceInterface
     )
     {
 
-        $storeId = (int)$request->getParam("store", 0);
-        if ($request->getParam('website', 0)) {
-            $scope = 'website';
-            $storeId = $request->getParam('website', 0);
-        } elseif ($request->getParam('store', 0)) {
-            $scope = 'stores';
-            $storeId = $request->getParam('store', 0);
-        } else {
-            $scope = 'default';
-        }
+//        $storeId = (int)$request->getParam("store", 0);
+//        if ($request->getParam('website', 0)) {
+//            $scope = 'website';
+//            $storeId = $request->getParam('website', 0);
+//        } elseif ($request->getParam('store', 0)) {
+//            $scope = 'stores';
+//            $storeId = $request->getParam('store', 0);
+//        } else {
+//            $scope = 'default';
+//        }
         $this->_options['module_version'] = $this->_helper->getModuleVersion();
         if ($this->_helper->hasClientConfiguration()) {
 
