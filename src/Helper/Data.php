@@ -24,6 +24,7 @@ class Data
     /** @var Client|null */
     private ?Client $client = null;
     private bool|null $hasClientConfiguration = null;
+    private Level|null $minLogLevel = null;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
@@ -183,7 +184,6 @@ class Data
         return $value === null ? null : (string)$value;
     }
 
-
     /**
      * Get task identifier
      *
@@ -281,19 +281,29 @@ class Data
      */
     public function getMinLogLevel(): Level
     {
-        try {
-            $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
-            if (empty($key)) {
-                return Level::Warning;
-            }
-            if (is_numeric($key)) {
-                return Level::fromValue((int)$key);
-            }
-            return Level::fromName($key);
-        } catch (\Throwable $ex) {
+        if ($this->minLogLevel === null) {
 
+
+            $key = null;
+            try {
+                $this->minLogLevel = Level::Warning;
+
+                $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
+                $key = 'emergency';
+               
+                if (!empty($key)) {
+                    if (is_numeric($key)) {
+                        $this->minLogLevel = Level::fromValue((int)$key);
+                    } else {
+                        $this->minLogLevel = Level::fromName($key);
+                    }
+                }
+            } catch (\Throwable $ex) {
+
+            }
         }
-        return Level::Warning;
+
+        return $this->minLogLevel;
     }
 
     public function getLogFilterIgnoreRules(): array

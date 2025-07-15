@@ -39,10 +39,10 @@ class AttlazMagentoLogHandler extends AbstractHandler
             $this->setLevel($minLogLevel);
         }
 
-        if ($record->level < $this->level) {
+        if ($record->level->value < $this->level->value) {
             return false;
         }
-
+        
         if (!$this->isActive()) {
             return false;
         }
