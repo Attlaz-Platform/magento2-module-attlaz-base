@@ -282,15 +282,11 @@ class Data
     public function getMinLogLevel(): Level
     {
         if ($this->minLogLevel === null) {
-
-
-            $key = null;
             try {
                 $this->minLogLevel = Level::Warning;
 
                 $key = $this->scopeConfig->getValue('attlaz/logging/minloglevel');
-                $key = 'emergency';
-               
+
                 if (!empty($key)) {
                     if (is_numeric($key)) {
                         $this->minLogLevel = Level::fromValue((int)$key);
