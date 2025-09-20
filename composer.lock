@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "80f33588edbcc2b11d58337298990829",
+    "content-hash": "c4d1964a9991738f3289575564bff4eb",
     "packages": [
         {
             "name": "attlaz/attlaz-monolog",
