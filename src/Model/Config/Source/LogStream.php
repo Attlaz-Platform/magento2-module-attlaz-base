@@ -45,7 +45,7 @@ class LogStream implements OptionSourceInterface
                     $projectId = $this->dataHelper->getProjectIdentifier();
                     $logStreams = LoadAllHelper::loadAll(
                         fn(CursorPagination $pagination): CollectionResult => $logEndpoint->getLogStreams($projectId, $pagination),
-                        fn($logStream): string => $logStream->getId()
+                        fn($logStream): string => (string)$logStream->getId()
                     );
 
                     if (count($logStreams) !== 0) {
