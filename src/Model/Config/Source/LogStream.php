@@ -39,7 +39,7 @@ class LogStream implements OptionSourceInterface
                 $client = $this->dataHelper->getClient();
                 if ($client !== null) {
                     $logEndpoint = $client->getLogEndpoint();
-                    $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier());
+                    $logStreams = $logEndpoint->getLogStreams($this->dataHelper->getProjectIdentifier())->getData();
 
                     if (count($logStreams) !== 0) {
                         $result[] = [

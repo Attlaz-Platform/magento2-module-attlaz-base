@@ -38,7 +38,7 @@ class Flow implements OptionSourceInterface
                 'label' => __('--Please Select--'),
             ];
             if ($this->canFetchData()) {
-                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier());
+                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier())->getData();
 
                 foreach ($flows as $flow) {
                     $label = $flow->name . ' (' . $flow->id . ')';

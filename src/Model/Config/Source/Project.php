@@ -39,7 +39,7 @@ class Project implements OptionSourceInterface
             try {
                 $client = $this->dataHelper->getClient();
                 if ($client !== null) {
-                    $projects = $client->getProjectEndpoint()->getProjects();
+                    $projects = $client->getProjectEndpoint()->getProjects()->getData();
 
                     if (count($projects) !== 0) {
                         $result[] = [
