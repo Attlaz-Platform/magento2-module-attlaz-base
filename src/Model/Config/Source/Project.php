@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
+use Attlaz\Helper\LoadAllHelper;
+use Attlaz\Model\CollectionResult;
+use Attlaz\Model\CursorPagination;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -39,7 +42,9 @@ class Project implements OptionSourceInterface
             try {
                 $client = $this->dataHelper->getClient();
                 if ($client !== null) {
-                    $projects = $client->getProjectEndpoint()->getProjects()->getData();
+                    $projects = LoadAllHelper::loadAll(
+                        fn(CursorPagination $pagination): CollectionResult => $client->getProjectEndpoint()->getProjects($pagination)
+                    );
 
                     if (count($projects) !== 0) {
                         $result[] = [

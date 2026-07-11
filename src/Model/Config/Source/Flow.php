@@ -5,6 +5,9 @@ declare(strict_types=1);
 namespace Attlaz\Base\Model\Config\Source;
 
 use Attlaz\Base\Helper\Data;
+use Attlaz\Helper\LoadAllHelper;
+use Attlaz\Model\CollectionResult;
+use Attlaz\Model\CursorPagination;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Message\ManagerInterface;
 
@@ -38,7 +41,11 @@ class Flow implements OptionSourceInterface
                 'label' => __('--Please Select--'),
             ];
             if ($this->canFetchData()) {
-                $flows = $this->dataHelper->getClient()->getFlowEndpoint()->getFlows($this->dataHelper->getProjectIdentifier())->getData();
+                $flowEndpoint = $this->dataHelper->getClient()->getFlowEndpoint();
+                $projectId = $this->dataHelper->getProjectIdentifier();
+                $flows = LoadAllHelper::loadAll(
+                    fn(CursorPagination $pagination): CollectionResult => $flowEndpoint->getFlows($projectId, $pagination)
+                );
 
                 foreach ($flows as $flow) {
                     $label = $flow->name . ' (' . $flow->id . ')';
